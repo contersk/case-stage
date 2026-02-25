@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+
+}
+
+// Requisito: Cadastro de Áreas
+model Area {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  processes Process[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+// Requisito: Gestão de Processos e Subprocessos (Hierarquia Infinita)
+model Process {
+  id          String    @id @default(uuid())
+  title       String
+  description String?
+  type        String    // ex: "systemic", "manual"
+  status      String    // ex: "active", "warning"
+  
+  // Relacionamento com a Área
+  areaId      String
+  area        Area      @relation(fields: [areaId], references: [id], onDelete: Cascade)
+
+  // A AUTO-REFERÊNCIA: O segredo da hierarquia
+  parentId    String?   
+  parent      Process?  @relation("ProcessHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
+  children    Process[] @relation("ProcessHierarchy")
+
+  // Detalhamentos exigidos pelo case
+  tools        Tool[]
+  responsibles Responsible[]
+  documents    Document[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Detalhamentos do Processo
+model Tool {
+  id        String  @id @default(uuid())
+  name      String
+  processId String
+  process   Process @relation(fields: [processId], references: [id], onDelete: Cascade)
+}
+
+model Responsible {
+  id        String  @id @default(uuid())
+  name      String
+  role      String?
+  processId String
+  process   Process @relation(fields: [processId], references: [id], onDelete: Cascade)
+}
+
+model Document {
+  id        String  @id @default(uuid())
+  title     String
+  url       String?
+  processId String
+  process   Process @relation(fields: [processId], references: [id], onDelete: Cascade)
+}
