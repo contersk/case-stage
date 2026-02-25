@@ -7,61 +7,101 @@ datasource db {
 
 }
 
-// Requisito: Cadastro de Áreas
-model Area {
-  id        String    @id @default(uuid())
-  name      String    @unique
-  processes Process[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+enum process_priority {
+  Alta
+  Media
+  Baixa
 }
 
-// Requisito: Gestão de Processos e Subprocessos (Hierarquia Infinita)
-model Process {
-  id          String    @id @default(uuid())
-  title       String
-  description String?
-  type        String    // ex: "systemic", "manual"
-  status      String    // ex: "active", "warning"
+enum process_type {
+  Sistemico
+  Manual
+}
+
+enum process_status {
+  Planejado
+  Em_Andamento
+  Concluido
+  Cancelado
+}
+model Area {
+  id        String    @id @default(uuid()) @map("id")
+  name      String    @unique @map("name") @db.VarChar(255)
+  processes Process[]
   
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  @@map("areas")
+}
+
+model Process {
+  id          String    @id @default(uuid()) @map("id")
+  title       String    @map("title") @db.VarChar(255)
+  description String?   @map("description") @db.Text
+  
+  // Utilizando os Enums para garantir integridade
+  type        process_type     @default(Manual) @map("type")
+  status      process_status   @default(Planejado) @map("status")
+  priority    process_priority @default(Media) @map("priority")
+  
+  // Datas para futuros gráficos de Gantt ou SLAs
+  startDate   DateTime? @map("start_date") @db.Date
+  endDate     DateTime? @map("end_date") @db.Date
+
   // Relacionamento com a Área
-  areaId      String
+  areaId      String    @map("area_id")
   area        Area      @relation(fields: [areaId], references: [id], onDelete: Cascade)
 
-  // A AUTO-REFERÊNCIA: O segredo da hierarquia
-  parentId    String?   
+  // A AUTO-REFERÊNCIA: A Árvore Hierárquica
+  parentId    String?   @map("parent_id")
   parent      Process?  @relation("ProcessHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
   children    Process[] @relation("ProcessHierarchy")
 
-  // Detalhamentos exigidos pelo case
+  // Tabelas Normalizadas (Melhor que campos de texto soltos)
   tools        Tool[]
   responsibles Responsible[]
   documents    Document[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@index([areaId])
+  @@index([parentId])
+  @@map("processes")
 }
 
-// Detalhamentos do Processo
 model Tool {
-  id        String  @id @default(uuid())
-  name      String
-  processId String
+  id        String  @id @default(uuid()) @map("id")
+  name      String  @map("name") @db.VarChar(255)
+  
+  processId String  @map("process_id")
   process   Process @relation(fields: [processId], references: [id], onDelete: Cascade)
+
+  @@index([processId])
+  @@map("tools")
 }
 
 model Responsible {
-  id        String  @id @default(uuid())
-  name      String
-  role      String?
-  processId String
+  id        String  @id @default(uuid()) @map("id")
+  name      String  @map("name") @db.VarChar(255)
+  role      String? @map("role") @db.VarChar(255)
+  
+  processId String  @map("process_id")
   process   Process @relation(fields: [processId], references: [id], onDelete: Cascade)
+
+  @@index([processId])
+  @@map("responsibles")
 }
 
 model Document {
-  id        String  @id @default(uuid())
-  title     String
-  url       String?
-  processId String
+  id        String  @id @default(uuid()) @map("id")
+  title     String  @map("title") @db.VarChar(255)
+  url       String? @map("url") @db.Text
+  
+  processId String  @map("process_id")
   process   Process @relation(fields: [processId], references: [id], onDelete: Cascade)
+
+  @@index([processId])
+  @@map("documents")
 }

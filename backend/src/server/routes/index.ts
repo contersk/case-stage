@@ -27,7 +27,7 @@ router.put("/pessoas/:id", ensureAuthenticated);
 
 router.delete("/pessoas/:id", ensureAuthenticated);
 
-router.post("/entrar/");
-router.post("/cadastrar");
+// router.post("/entrar/");
+// router.post("/cadastrar");
 
 export { router };
