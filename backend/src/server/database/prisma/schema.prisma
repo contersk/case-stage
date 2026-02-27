@@ -25,7 +25,7 @@ enum process_status {
   Cancelado
 }
 model Area {
-  id        String    @id @default(uuid()) @map("id")
+  id        String    @id @default(uuid()) @map("id") 
   name      String    @unique @map("name") @db.VarChar(255)
   processes Process[]
   

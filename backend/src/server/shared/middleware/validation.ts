@@ -2,13 +2,17 @@ import type { RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
 import type { ZodType } from "zod";
 
-// keep same keys used previously; callers can supply body, header, params or query
-// (header is retained for backwards compatibility even though express uses "headers").
-// `ZodType` is the generic schema type; `ZodSchema` has been deprecated.
+// Tipagens para o middleware de validação usando Zod
+
+// TProperty representa as partes da requisição que podem ser validadas
 type TProperty = "body" | "header" | "params" | "query";
+// TGetSchema é uma função que recebe um schema Zod e retorna o mesmo tipo de schema
 type TGetSchema = <T>(schema: ZodType<T>) => ZodType<T>;
+// TAllSchemas é um tipo que representa um objeto onde as chaves são as partes da requisição e os valores são schemas Zod
 type TAllSchemas = Record<TProperty, ZodType<any>>;
+// TGetAllSchemas é uma função que recebe a função TGetSchema e retorna um objeto parcial de TAllSchemas, ou seja, pode conter apenas algumas das partes da requisição
 type TGetAllSchemas = (getSchema: TGetSchema) => Partial<TAllSchemas>;
+// TValidation é o tipo do middleware de validação, que recebe a função TGetAllSchemas e retorna um RequestHandler do Express
 type TValidation = (getAllSchemas: TGetAllSchemas) => RequestHandler;
 
 export const validation: TValidation =
