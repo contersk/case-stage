@@ -2,7 +2,7 @@ import type { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
 
-import { ProcessesService } from "../../database/services/processes/ProcesssesServices";
+import { ProcessesService } from "../../database/services/processes/ProcessesServices";
 import { validation } from "../../shared/middleware";
 import {
   PROCESS_STATUS_VALUES,
@@ -24,8 +24,22 @@ const updateBodySchema = z.object({
   type: z.enum(PROCESS_TYPE_VALUES).optional(),
   status: z.enum(PROCESS_STATUS_VALUES).optional(),
   priority: z.enum(PROCESS_PRIORITY_VALUES).optional(),
-  startDate: z.string().nullable().optional(),
-  endDate: z.string().nullable().optional(),
+  startDate: z
+    .string()
+    .datetime({
+      message:
+        "O campo 'startDate' deve estar no formato ISO 8601 (ex: 2026-01-01T00:00:00.000Z).",
+    })
+    .nullable()
+    .optional(),
+  endDate: z
+    .string()
+    .datetime({
+      message:
+        "O campo 'endDate' deve estar no formato ISO 8601 (ex: 2026-12-31T00:00:00.000Z).",
+    })
+    .nullable()
+    .optional(),
   areaId: z.uuid("O campo 'areaId' deve ser um UUID válido.").optional(),
   parentId: z
     .uuid("O campo 'parentId' deve ser um UUID válido.")

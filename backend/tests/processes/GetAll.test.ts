@@ -50,29 +50,34 @@ describe("Processes - GetAll", () => {
     const res = await testServer.get("/processes");
 
     expect(res.statusCode).toEqual(StatusCodes.OK);
-    expect(res.body.length).toBeGreaterThan(0);
+    expect(res.body).toHaveProperty("data");
+    expect(res.body).toHaveProperty("total");
+    expect(res.body).toHaveProperty("page");
+    expect(res.body).toHaveProperty("limit");
+    expect(res.body).toHaveProperty("totalPages");
+    expect(res.body.data.length).toBeGreaterThan(0);
   });
 
   it("Should filter processes by search term", async () => {
     const res = await testServer.get("/processes?search=Recrutamento");
 
     expect(res.statusCode).toEqual(StatusCodes.OK);
-    expect(res.body.length).toEqual(1);
-    expect(res.body[0].title).toEqual("Recrutamento");
+    expect(res.body.data.length).toEqual(1);
+    expect(res.body.data[0].title).toEqual("Recrutamento");
   });
 
   it("Should filter processes by areaId", async () => {
     const res = await testServer.get(`/processes?areaId=${areaId}`);
 
     expect(res.statusCode).toEqual(StatusCodes.OK);
-    expect(res.body.length).toEqual(3);
+    expect(res.body.data.length).toEqual(3);
   });
 
   it("Should filter processes by status", async () => {
     const res = await testServer.get("/processes?status=Planejado");
 
     expect(res.statusCode).toEqual(StatusCodes.OK);
-    expect(res.body.length).toEqual(1);
-    expect(res.body[0].title).toEqual("Recrutamento");
+    expect(res.body.data.length).toEqual(1);
+    expect(res.body.data[0].title).toEqual("Recrutamento");
   });
 });

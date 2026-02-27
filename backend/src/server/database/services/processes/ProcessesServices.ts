@@ -112,14 +112,18 @@ const create = async (data: ICreateProcessInput) => {
   return result;
 };
 
-const getAll = async (filters?: {
-  search?: string | undefined;
-  status?: string | undefined;
-  type?: string | undefined;
-  priority?: string | undefined;
-  areaId?: string | undefined;
-}) => {
-  const result = await ProcessesRepository.getAll(filters);
+const getAll = async (
+  page: number,
+  limit: number,
+  filters?: {
+    search?: string | undefined;
+    status?: string | undefined;
+    type?: string | undefined;
+    priority?: string | undefined;
+    areaId?: string | undefined;
+  },
+) => {
+  const result = await ProcessesRepository.getAll(page, limit, filters);
   if (result instanceof Error) throw result;
   return result;
 };

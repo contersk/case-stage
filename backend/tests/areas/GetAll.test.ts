@@ -23,16 +23,21 @@ describe("Areas - GetAll", () => {
     const res = await testServer.get("/areas");
 
     expect(res.statusCode).toEqual(StatusCodes.OK);
-    expect(Array.isArray(res.body)).toBe(true);
-    expect(res.body.length).toBeGreaterThanOrEqual(3);
+    expect(res.body).toHaveProperty("data");
+    expect(res.body).toHaveProperty("total");
+    expect(res.body).toHaveProperty("page");
+    expect(res.body).toHaveProperty("limit");
+    expect(res.body).toHaveProperty("totalPages");
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBeGreaterThanOrEqual(3);
   });
 
   it("Should filter areas by name", async () => {
     const res = await testServer.get("/areas?filter=Tecnologia");
 
     expect(res.statusCode).toEqual(StatusCodes.OK);
-    expect(Array.isArray(res.body)).toBe(true);
-    expect(res.body.length).toEqual(1);
-    expect(res.body[0].name).toEqual("Tecnologia");
+    expect(res.body.data.length).toEqual(1);
+    expect(res.body.data[0].name).toEqual("Tecnologia");
+    expect(res.body.total).toEqual(1);
   });
 });

@@ -2,7 +2,7 @@ import type { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
 
-import { ProcessesService } from "../../database/services/processes/ProcesssesServices";
+import { ProcessesService } from "../../database/services/processes/ProcessesServices";
 import { validation } from "../../shared/middleware";
 
 export interface IParamProps {

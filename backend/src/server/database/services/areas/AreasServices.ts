@@ -31,8 +31,8 @@ const create = async (data: Omit<IArea, "id">): Promise<IArea> => {
   return result;
 };
 
-const getAll = async (filter?: string): Promise<IArea[]> => {
-  const result = await AreasRepository.getAll(filter);
+const getAll = async (page: number, limit: number, filter?: string) => {
+  const result = await AreasRepository.getAll(page, limit, filter);
   if (result instanceof Error) throw result;
   return result;
 };

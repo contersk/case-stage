@@ -6,12 +6,16 @@ import { AreasService } from "../../database/services/areas/AreasServices";
 import { validation } from "../../shared/middleware";
 
 export interface IQueryProps {
+  page?: string | undefined;
+  limit?: string | undefined;
   filter?: string | undefined;
 }
 
 export const getAllValidation = validation((getSchema) => ({
   query: getSchema<IQueryProps>(
     z.object({
+      page: z.string().optional(),
+      limit: z.string().optional(),
       filter: z.string().optional(),
     }),
   ),
@@ -23,7 +27,10 @@ export const getAll = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const result = await AreasService.getAll(req.query.filter);
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 20;
+
+    const result = await AreasService.getAll(page, limit, req.query.filter);
     res.status(StatusCodes.OK).json(result);
   } catch (error) {
     next(error);
