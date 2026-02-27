@@ -1,17 +1,15 @@
 import type { IArea } from "../../database/models";
 import { prisma } from "../../database/prisma";
-import type { Area } from "@prisma/client";
 
-// Recebemos os dados necessários para criar (no caso da Área, apenas o nome)
-export const create = async (area: IArea): Promise<Area | Error> => {
+export const create = async (
+  data: Omit<IArea, "id">,
+): Promise<IArea | Error> => {
   try {
     const result = await prisma.area.create({
       data: {
-        name: area.nome,
+        name: data.name,
       },
     });
-
-    // O Prisma já retorna o objeto inteiro inserido (com ID criado, createdAt, etc.)
     return result;
   } catch (error) {
     console.error(error);

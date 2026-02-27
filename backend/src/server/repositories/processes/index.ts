@@ -4,7 +4,7 @@ import * as GetByID from "./GetByID";
 import * as UpdateByID from "./UpdateByID";
 import * as DeleteByID from "./DeleteByID";
 
-export const ProcessesController = {
+export const ProcessesRepository = {
   ...Create,
   ...GetAll,
   ...GetByID,

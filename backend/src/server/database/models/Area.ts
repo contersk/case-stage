@@ -1,4 +1,6 @@
 export interface IArea {
   id: string;
-  nome: string;
+  name: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

@@ -4,7 +4,7 @@ import * as GetByID from "./GetByID";
 import * as UpdateByID from "./UpdateByID";
 import * as DeleteByID from "./DeleteByID";
 
-export const AreasRepositorioes = {
+export const AreasRepository = {
   ...Create,
   ...GetAll,
   ...GetByID,

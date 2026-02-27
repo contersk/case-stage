@@ -1,34 +1,33 @@
-import type { Request, Response } from "express";
+import type { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import * as zod from "zod";
 
-import { AreasProvider } from "../../repositories/areas";
+import { AreasService } from "../../database/services/areas/AreasServices";
 import { validation } from "../../shared/middleware";
 import type { IArea } from "../../database/models";
 
-interface IBodyProps extends Omit<IArea, "id"> {}
+export interface IBodyProps extends Omit<IArea, "id"> {}
 
 export const createValidation = validation((getSchema) => ({
   body: getSchema<IBodyProps>(
     zod.object({
-      nome: zod.string().min(3).max(150),
+      name: zod
+        .string()
+        .min(3, "O nome deve ter no mínimo 3 caracteres.")
+        .max(255),
     }),
   ),
 }));
 
 export const Create = async (
-  req: Request<{}, {}, IArea>,
+  req: Request<{}, {}, IBodyProps>,
   res: Response,
-): Promise<Response> => {
-  const result = await AreasProvider.create(req.body);
-
-  if (result instanceof Error) {
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      errors: {
-        default: result.message,
-      },
-    });
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const result = await AreasService.create(req.body);
+    res.status(StatusCodes.CREATED).json(result);
+  } catch (error) {
+    next(error);
   }
-
-  return res.status(StatusCodes.CREATED).json(result);
 };
