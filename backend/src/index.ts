@@ -7,7 +7,8 @@ console.log("iniciando server...");
 const startServer = () => {
   server
     .listen(parseInt(process.env.PORT || "3333"), "::", () => {
-      console.log(`server rodando na porta numero: ${process.env.PORT}`);
+      console.log(`server rodando em http://localhost:${process.env.PORT}`);
+      console.log(`swagger em http://localhost:${process.env.PORT}/api-docs`);
     })
     .on("error", (err: Error) => {
       console.log(
@@ -18,3 +19,12 @@ const startServer = () => {
 };
 
 startServer();
+
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("Promise rejeitada não tratada:", reason);
+});
+
+process.on("uncaughtException", (error) => {
+  console.error("Exceção não capturada:", error);
+  process.exit(1);
+});
