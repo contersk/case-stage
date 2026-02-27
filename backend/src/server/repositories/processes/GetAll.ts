@@ -1,24 +1,8 @@
 import { prisma } from "../../database/prisma";
-
-export interface IProcessWithRelations {
-  id: string;
-  title: string;
-  description: string | null;
-  type: string;
-  status: string;
-  priority: string;
-  startDate: Date | null;
-  endDate: Date | null;
-  areaId: string;
-  parentId: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-  area: { id: string; name: string };
-  tools: Array<{ id: string; name: string }>;
-  responsibles: Array<{ id: string; name: string; role: string | null }>;
-  documents: Array<{ id: string; title: string; url: string | null }>;
-  children: Array<{ id: string; title: string; status: string; type: string }>;
-}
+import type {
+  IProcessWithRelations,
+  IPaginatedResult,
+} from "./IProcessesRepository";
 
 export const getAll = async (
   page: number,
@@ -30,16 +14,7 @@ export const getAll = async (
     priority?: string | undefined;
     areaId?: string | undefined;
   },
-): Promise<
-  | {
-      data: IProcessWithRelations[];
-      total: number;
-      page: number;
-      limit: number;
-      totalPages: number;
-    }
-  | Error
-> => {
+): Promise<IPaginatedResult<IProcessWithRelations> | Error> => {
   try {
     const where: Record<string, unknown> = {};
 

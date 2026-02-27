@@ -42,7 +42,6 @@
   /* explicitly compile the parts of the repo you care about */
   "include": [
     "src/**/*.ts", // main code
-    "tests/**/*.ts", // test files
     "prisma.config.ts", // Prisma setup file
     "prisma/**/*.ts" // if you ever keep helper scripts there
   ],

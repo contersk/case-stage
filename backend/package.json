@@ -14,12 +14,10 @@
   },
   "dependencies": {
     "@prisma/client": "^6.19.2",
-    "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "http-status-codes": "^2.3.0",
-    "jsonwebtoken": "^9.0.3",
     "morgan": "^1.10.0",
     "prisma": "^6.19.2",
     "swagger-jsdoc": "^6.2.8",
@@ -28,10 +26,8 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@types/bcrypt": "^6.0.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
-    "@types/jsonwebtoken": "^9.0.10",
     "@types/morgan": "^1.9.9",
     "@types/node": "^25.3.0",
     "@types/supertest": "^7.2.0",

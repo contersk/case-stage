@@ -1,15 +1,12 @@
 import "dotenv/config";
+import { defineConfig, env } from "prisma/config";
 
-const prismaConfig = {
+export default defineConfig({
   schema: "./src/server/database/prisma/schema.prisma",
   migrations: {
-    path: "prisma/migrations",
-    seed: "npx tsx prisma/seed.ts",
+    path: "./src/server/database/prisma/migrations",
   },
   datasource: {
-    // Use local SQLite for migrations
-    url: process.env.DATABASE_URL,
+    url: env("DATABASE_URL"),
   },
-};
-
-export default prismaConfig;
+});

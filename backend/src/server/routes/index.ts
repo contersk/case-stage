@@ -16,6 +16,11 @@ router.get(
   AreasController.getByIdValidation,
   AreasController.getById,
 );
+router.get(
+  "/areas/:id/tree",
+  ProcessesController.getTreeValidation,
+  ProcessesController.getTree,
+);
 router.post("/areas", AreasController.createValidation, AreasController.Create);
 router.put(
   "/areas/:id",

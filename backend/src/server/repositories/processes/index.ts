@@ -1,6 +1,7 @@
 import * as Create from "./Create";
 import * as GetAll from "./GetAll";
 import * as GetByID from "./GetByID";
+import * as GetTree from "./GetTree";
 import * as UpdateByID from "./UpdateByID";
 import * as DeleteByID from "./DeleteByID";
 export type {
@@ -8,12 +9,16 @@ export type {
   ICreateProcessData,
   IUpdateProcessData,
   IProcessWithRelations,
+  IProcessDetails,
+  IProcessTreeNode,
+  IPaginatedResult,
 } from "./IProcessesRepository";
 
 export const ProcessesRepository = {
   ...Create,
   ...GetAll,
   ...GetByID,
+  ...GetTree,
   ...UpdateByID,
   ...DeleteByID,
 };

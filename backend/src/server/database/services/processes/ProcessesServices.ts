@@ -13,6 +13,12 @@ import type {
   ICreateProcessInput,
   IUpdateProcessInput,
 } from "./IProcessesService";
+import type {
+  IProcessDetails,
+  IProcessTreeNode,
+  IProcessWithRelations,
+  IPaginatedResult,
+} from "../../../repositories/processes";
 
 class ProcessesServiceImpl implements IProcessesService {
   constructor(
@@ -87,7 +93,7 @@ class ProcessesServiceImpl implements IProcessesService {
     this.validateDateRange(data.startDate, data.endDate);
   }
 
-  async create(data: ICreateProcessInput) {
+  async create(data: ICreateProcessInput): Promise<IProcessDetails> {
     await this.validateProcess(data);
 
     const result = await this.processesRepository.create({
@@ -97,7 +103,7 @@ class ProcessesServiceImpl implements IProcessesService {
     });
 
     if (result instanceof Error) throw result;
-    return result;
+    return result as IProcessDetails;
   }
 
   async getAll(
@@ -110,17 +116,55 @@ class ProcessesServiceImpl implements IProcessesService {
       priority?: string | undefined;
       areaId?: string | undefined;
     },
-  ) {
+  ): Promise<IPaginatedResult<IProcessWithRelations>> {
     const result = await this.processesRepository.getAll(page, limit, filters);
     if (result instanceof Error) throw result;
     return result;
   }
 
-  async getById(id: string) {
-    return await this.getProcessOrThrow(id);
+  async getById(id: string): Promise<IProcessDetails> {
+    return (await this.getProcessOrThrow(id)) as IProcessDetails;
   }
 
-  async updateById(id: string, data: IUpdateProcessInput) {
+  private buildTree(
+    processes: Array<Omit<IProcessTreeNode, "children">>,
+    parentId: string | null,
+  ): IProcessTreeNode[] {
+    return processes
+      .filter((process) => process.parentId === parentId)
+      .map((process) => ({
+        ...process,
+        children: this.buildTree(processes, process.id),
+      }));
+  }
+
+  async getTree(areaId: string): Promise<IProcessTreeNode[]> {
+    await this.validateAreaExists(areaId);
+    const allProcesses = await this.processesRepository.getAllByArea(areaId);
+
+    if (allProcesses instanceof Error) throw allProcesses;
+
+    const flattened = allProcesses.map((process) => ({
+      id: process.id,
+      title: process.title,
+      description: process.description,
+      type: process.type,
+      status: process.status,
+      priority: process.priority,
+      parentId: process.parentId,
+      areaId: process.areaId,
+      tools: process.tools,
+      responsibles: process.responsibles,
+      documents: process.documents,
+    }));
+
+    return this.buildTree(flattened, null);
+  }
+
+  async updateById(
+    id: string,
+    data: IUpdateProcessInput,
+  ): Promise<IProcessDetails> {
     const currentProcess = await this.getProcessOrThrow(id);
 
     const mergedData: ICreateProcessInput = {
@@ -164,7 +208,7 @@ class ProcessesServiceImpl implements IProcessesService {
     });
 
     if (result instanceof Error) throw result;
-    return result;
+    return result as IProcessDetails;
   }
 
   async deleteById(id: string): Promise<void> {

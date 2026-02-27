@@ -1,6 +1,9 @@
 import { prisma } from "../../database/prisma";
+import type { IProcessDetails } from "./IProcessesRepository";
 
-export const getById = async (id: string) => {
+export const getById = async (
+  id: string,
+): Promise<IProcessDetails | null | Error> => {
   try {
     const result = await prisma.process.findUnique({
       where: { id },

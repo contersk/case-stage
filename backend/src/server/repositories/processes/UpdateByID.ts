@@ -1,21 +1,13 @@
 import { prisma } from "../../database/prisma";
+import type {
+  IUpdateProcessData,
+  IProcessDetails,
+} from "./IProcessesRepository";
 
-export interface IUpdateProcessData {
-  title?: string | undefined;
-  description?: string | null | undefined;
-  type?: "Sistemico" | "Manual" | undefined;
-  status?: "Planejado" | "Em_Andamento" | "Concluido" | "Cancelado" | undefined;
-  priority?: "Alta" | "Media" | "Baixa" | undefined;
-  startDate?: Date | null | undefined;
-  endDate?: Date | null | undefined;
-  areaId?: string | undefined;
-  parentId?: string | null | undefined;
-  tools?: Array<{ name: string }> | undefined;
-  responsibles?: Array<{ name: string; role?: string | null }> | undefined;
-  documents?: Array<{ title: string; url?: string | null }> | undefined;
-}
-
-export const updateById = async (id: string, data: IUpdateProcessData) => {
+export const updateById = async (
+  id: string,
+  data: IUpdateProcessData,
+): Promise<IProcessDetails | Error> => {
   try {
     // If related data is provided, delete-then-recreate (replace strategy)
     const result = await prisma.$transaction(async (tx) => {

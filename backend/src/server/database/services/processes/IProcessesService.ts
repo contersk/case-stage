@@ -1,4 +1,10 @@
 import type { ProcessStatus, ProcessPriority, ProcessType } from "../../models";
+import type {
+  IProcessDetails,
+  IProcessWithRelations,
+  IProcessTreeNode,
+  IPaginatedResult,
+} from "../../../repositories/processes";
 
 export interface ICreateProcessInput {
   title: string;
@@ -18,7 +24,7 @@ export interface ICreateProcessInput {
 export type IUpdateProcessInput = Partial<ICreateProcessInput>;
 
 export interface IProcessesService {
-  create(data: ICreateProcessInput): Promise<any>;
+  create(data: ICreateProcessInput): Promise<IProcessDetails>;
   getAll(
     page: number,
     limit: number,
@@ -29,8 +35,9 @@ export interface IProcessesService {
       priority?: string | undefined;
       areaId?: string | undefined;
     },
-  ): Promise<any>;
-  getById(id: string): Promise<any>;
-  updateById(id: string, data: IUpdateProcessInput): Promise<any>;
+  ): Promise<IPaginatedResult<IProcessWithRelations>>;
+  getById(id: string): Promise<IProcessDetails>;
+  getTree(areaId: string): Promise<IProcessTreeNode[]>;
+  updateById(id: string, data: IUpdateProcessInput): Promise<IProcessDetails>;
   deleteById(id: string): Promise<void>;
 }

@@ -46,8 +46,8 @@ model Process {
   priority    process_priority @default(Media) @map("priority")
   
   // Datas para futuros gráficos de Gantt ou SLAs
-  startDate   DateTime? @map("start_date") @db.Date
-  endDate     DateTime? @map("end_date") @db.Date
+  startDate   DateTime? @map("start_date")
+  endDate     DateTime? @map("end_date")
 
   // Relacionamento com a Área
   areaId      String    @map("area_id")

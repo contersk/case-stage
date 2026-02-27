@@ -324,6 +324,41 @@ const options: swaggerJsdoc.Options = {
           },
         },
       },
+      "/areas/{id}/tree": {
+        get: {
+          tags: ["Áreas"],
+          summary: "Buscar árvore hierárquica de processos da área",
+          parameters: [
+            {
+              name: "id",
+              in: "path",
+              required: true,
+              schema: { type: "string", format: "uuid" },
+            },
+          ],
+          responses: {
+            "200": {
+              description: "Árvore completa de processos da área",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "array",
+                    items: { $ref: "#/components/schemas/Process" },
+                  },
+                },
+              },
+            },
+            "404": {
+              description: "Área não encontrada",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/Error" },
+                },
+              },
+            },
+          },
+        },
+      },
       "/processes": {
         get: {
           tags: ["Processos"],
