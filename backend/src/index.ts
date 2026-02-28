@@ -1,7 +1,11 @@
 import { server } from "./server/Server";
 import "dotenv/config";
 
-//inicialização e verificação de porta do servidor
+/**
+ * Entry point da aplicação.
+ * Inicializa o servidor Express na porta configurada (env PORT, padrão 3333)
+ * e registra handlers globais para erros não tratados.
+ */
 console.log("iniciando server...");
 
 const startServer = () => {

@@ -2,6 +2,16 @@ import { Router } from "express";
 import { AreasController } from "../controllers/areas";
 import { ProcessesController } from "../controllers/processes";
 
+/**
+ * Router principal da aplicação.
+ * Centraliza todas as rotas organizadas por domínio:
+ * - /areas         → CRUD de áreas organizacionais
+ * - /areas/:id/tree → Árvore hierárquica de processos de uma área
+ * - /processes     → CRUD de processos com relações
+ * - /metadata/*    → Endpoints de metadados visuais (cores, ícones, labels)
+ *
+ * Cada rota passa por middleware de validação Zod antes de chegar ao controller.
+ */
 const router = Router();
 
 // Health check

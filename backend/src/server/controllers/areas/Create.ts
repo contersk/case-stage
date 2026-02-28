@@ -8,6 +8,10 @@ import type { IArea } from "../../database/models";
 
 export interface IBodyProps extends Omit<IArea, "id"> {}
 
+/**
+ * Schema de validação do body para criação de área.
+ * Requer name com mínimo de 3 e máximo de 255 caracteres.
+ */
 export const createValidation = validation((getSchema) => ({
   body: getSchema<IBodyProps>(
     zod.object({
@@ -19,6 +23,7 @@ export const createValidation = validation((getSchema) => ({
   ),
 }));
 
+/** Handler HTTP para criação de área. Retorna 201 Created com o objeto criado. */
 export const Create = async (
   req: Request<{}, {}, IBodyProps>,
   res: Response,

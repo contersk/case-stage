@@ -1,3 +1,9 @@
+/**
+ * Classe base para erros da aplicação com status HTTP customizado.
+ * Todas as subclasses herdam o padrão { message, statusCode }.
+ * O error handler global detecta instâncias de AppError
+ * e responde com o status correto automaticamente.
+ */
 export class AppError extends Error {
   public readonly statusCode: number;
 

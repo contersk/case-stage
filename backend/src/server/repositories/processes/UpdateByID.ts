@@ -4,6 +4,16 @@ import type {
   IProcessDetails,
 } from "./IProcessesRepository";
 
+/**
+ * Atualiza um processo usando replace strategy para relações.
+ * Dentro de uma transação Prisma ($transaction):
+ * 1. Deleta todos os tools/responsibles/documents existentes (se novos foram enviados)
+ * 2. Atualiza os campos escalares do processo
+ * 3. Cria os novos registros de relações
+ *
+ * Essa abordagem garante consistência atômica e simplifica a lógica
+ * (evita diff/merge complexo de relações).
+ */
 export const updateById = async (
   id: string,
   data: IUpdateProcessData,

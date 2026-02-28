@@ -7,9 +7,16 @@ import {
 import type { IArea } from "../../models";
 import type { IAreasService } from "./IAreasService";
 
+/**
+ * Serviço de negócio para Áreas.
+ * Encapsula todas as regras de validação antes de delegar ao repositório:
+ * - Unicidade de nome (ConflictError 409)
+ * - Existência do recurso (NotFoundError 404)
+ */
 class AreasServiceImpl implements IAreasService {
   constructor(private readonly areasRepository: IAreasRepository) {}
 
+  /** Verifica se já existe uma área com o mesmo nome. Lança ConflictError 409 se duplicado. */
   private async validateAreaName(name: string): Promise<void> {
     const existing = await this.areasRepository.getByName(name);
     if (existing instanceof Error) throw existing;
@@ -20,6 +27,7 @@ class AreasServiceImpl implements IAreasService {
     }
   }
 
+  /** Busca área pelo ID ou lança NotFoundError 404 se não encontrada. */
   private async getAreaOrThrow(id: string): Promise<IArea> {
     const area = await this.areasRepository.getById(id);
     if (area instanceof Error) throw area;
@@ -29,6 +37,7 @@ class AreasServiceImpl implements IAreasService {
     return area;
   }
 
+  /** Cria uma nova área após validar unicidade do nome. */
   async create(data: Omit<IArea, "id">): Promise<IArea> {
     await this.validateAreaName(data.name);
     const result = await this.areasRepository.create(data);
@@ -46,6 +55,7 @@ class AreasServiceImpl implements IAreasService {
     return await this.getAreaOrThrow(id);
   }
 
+  /** Atualiza uma área existente. Valida existência e unicidade do novo nome. */
   async updateById(
     id: string,
     data: Partial<Omit<IArea, "id">>,

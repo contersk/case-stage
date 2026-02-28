@@ -29,6 +29,11 @@ export const getAllValidation = validation((getSchema) => ({
   ),
 }));
 
+/**
+ * Handler HTTP para listagem paginada de processos.
+ * Suporta filtros via query string: search, status, type, priority, areaId.
+ * Retorna IPaginatedResult com data[], total, page, limit, totalPages.
+ */
 export const getAll = async (
   req: Request<{}, {}, {}, IQueryProps>,
   res: Response,

@@ -20,12 +20,22 @@ import type {
   IPaginatedResult,
 } from "../../../repositories/processes";
 
+/**
+ * Serviço de negócio para Processos.
+ * Implementa validações complexas de integridade hierárquica:
+ * - A área referenciada deve existir
+ * - O processo pai (se informado) deve existir e pertencer à mesma área
+ * - Um processo não pode ser pai de si mesmo
+ * - A data de término deve ser >= data de início
+ * - Relações (tools, responsibles, documents) usam replace strategy em updates
+ */
 class ProcessesServiceImpl implements IProcessesService {
   constructor(
     private readonly processesRepository: IProcessesRepository,
     private readonly areasRepository: IAreasRepository,
   ) {}
 
+  /** Valida que a área referenciada existe. Lança NotFoundError 404 se não encontrada. */
   private async validateAreaExists(areaId: string): Promise<void> {
     const area = await this.areasRepository.getById(areaId);
     if (area instanceof Error) throw area;
@@ -34,6 +44,7 @@ class ProcessesServiceImpl implements IProcessesService {
     }
   }
 
+  /** Busca processo pelo ID ou lança NotFoundError 404. */
   private async getProcessOrThrow(id: string) {
     const process = await this.processesRepository.getById(id);
     if (process instanceof Error) throw process;
@@ -43,6 +54,7 @@ class ProcessesServiceImpl implements IProcessesService {
     return process;
   }
 
+  /** Impede que um processo seja definido como pai de si mesmo. Lança ConflictError 409. */
   private validateNoSelfParent(id: string, parentId?: string | null): void {
     if (parentId && parentId === id) {
       throw new ConflictError("Um processo não pode ser pai de si mesmo.");
@@ -54,6 +66,11 @@ class ProcessesServiceImpl implements IProcessesService {
     await this.getProcessOrThrow(parentId);
   }
 
+  /**
+   * Garante que o processo pai pertence à mesma área que o filho.
+   * Regra: subprocessos devem estar na mesma área do processo raiz.
+   * Lança ConflictError 409 se as áreas divergirem.
+   */
   private async validateParentArea(
     childAreaId: string,
     parentId?: string | null,
@@ -67,6 +84,7 @@ class ProcessesServiceImpl implements IProcessesService {
     }
   }
 
+  /** Valida que endDate >= startDate quando ambos estão preenchidos. Lança BadRequestError 400. */
   private validateDateRange(
     startDate?: string | null,
     endDate?: string | null,
@@ -82,6 +100,14 @@ class ProcessesServiceImpl implements IProcessesService {
     }
   }
 
+  /**
+   * Executa todas as validações de negócio para criação/atualização de processo:
+   * 1. Área existe
+   * 2. Não é auto-referência (se currentId informado)
+   * 3. Processo pai existe (se parentId informado)
+   * 4. Processo pai pertence à mesma área
+   * 5. Range de datas válido
+   */
   private async validateProcess(
     data: ICreateProcessInput,
     currentId?: string,
@@ -126,6 +152,11 @@ class ProcessesServiceImpl implements IProcessesService {
     return (await this.getProcessOrThrow(id)) as IProcessDetails;
   }
 
+  /**
+   * Constrói a árvore hierárquica recursivamente a partir de uma lista plana de processos.
+   * Filtra os processos cujo parentId corresponde ao nível atual e anexa os filhos recursivamente.
+   * Complexidade: O(n²) no pior caso — aceitável para árvores organizacionais de tamanho moderado.
+   */
   private buildTree(
     processes: Array<Omit<IProcessTreeNode, "children">>,
     parentId: string | null,
@@ -138,6 +169,11 @@ class ProcessesServiceImpl implements IProcessesService {
       }));
   }
 
+  /**
+   * Retorna a árvore hierárquica completa de processos de uma área.
+   * Busca todos os processos da área no banco (flat) e monta a árvore em memória via buildTree().
+   * Os nós raiz são aqueles com parentId === null.
+   */
   async getTree(areaId: string): Promise<IProcessTreeNode[]> {
     await this.validateAreaExists(areaId);
     const allProcesses = await this.processesRepository.getAllByArea(areaId);
@@ -161,6 +197,12 @@ class ProcessesServiceImpl implements IProcessesService {
     return this.buildTree(flattened, null);
   }
 
+  /**
+   * Atualiza parcialmente um processo.
+   * Mescla os campos enviados com os valores atuais para re-validar todas as regras de negócio.
+   * As relações (tools, responsibles, documents) usam replace strategy:
+   * os registros antigos são deletados e os novos criados dentro de uma transação.
+   */
   async updateById(
     id: string,
     data: IUpdateProcessInput,

@@ -1,6 +1,15 @@
 import { prisma } from "../../database/prisma";
 import type { IProcessDetails } from "./IProcessesRepository";
 
+/**
+ * Busca um processo por ID com todos os relacionamentos:
+ * - area (id, name)
+ * - tools, responsibles, documents
+ * - children (subprocessos diretos)
+ * - parent (processo pai, se existir)
+ *
+ * Retorna null se não encontrado (tratamento feito no service).
+ */
 export const getById = async (
   id: string,
 ): Promise<IProcessDetails | null | Error> => {

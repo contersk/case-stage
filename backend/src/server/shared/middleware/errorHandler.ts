@@ -1,6 +1,14 @@
 import type { Request, Response, NextFunction } from "express";
 import { AppError } from "../utils/CustomErrors";
 
+/**
+ * Error handler global do Express.
+ * Deve ser registrado como último middleware (após todas as rotas).
+ * Trata três formatos de erro:
+ * 1. Erros Zod (campo 'issues') → HTTP 400 com lista de validações
+ * 2. AppError e subclasses (NotFound, Conflict, BadRequest) → HTTP status customizado
+ * 3. Erros genéricos/inesperados → HTTP 500
+ */
 export const errorHandler = (
   err: unknown,
   _req: Request,

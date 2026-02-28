@@ -1,6 +1,12 @@
 import { prisma } from "../../database/prisma";
 import type { IProcessTreeNode } from "./IProcessesRepository";
 
+/**
+ * Busca todos os processos de uma área para construção da árvore hierárquica.
+ * Retorna uma lista plana (sem hierarquia) — a montagem da árvore é feita no service.
+ * Inclui relações (tools, responsibles, documents) para cada nó.
+ * Ordena por data de criação para manter consistência visual.
+ */
 export const getAllByArea = async (
   areaId: string,
 ): Promise<IProcessTreeNode[] | Error> => {

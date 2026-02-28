@@ -15,6 +15,21 @@ type TGetAllSchemas = (getSchema: TGetSchema) => Partial<TAllSchemas>;
 // TValidation é o tipo do middleware de validação, que recebe a função TGetAllSchemas e retorna um RequestHandler do Express
 type TValidation = (getAllSchemas: TGetAllSchemas) => RequestHandler;
 
+/**
+ * Middleware genérico de validação baseado em Zod.
+ * Permite validar qualquer combinação de body, params, query e headers em uma única chamada.
+ *
+ * Uso nos controllers:
+ * ```ts
+ * export const createValidation = validation((getSchema) => ({
+ *   body: getSchema<IBodyProps>(zod.object({ name: zod.string().min(3) })),
+ *   params: getSchema<IParamProps>(zod.object({ id: zod.uuid() })),
+ * }));
+ * ```
+ *
+ * Se a validação falhar, retorna 400 com os erros agrupados por parte da request (body, params, etc.).
+ * Se passar, chama next() para o controller handler.
+ */
 export const validation: TValidation =
   (getAllSchemas) => async (req, res, next) => {
     const schemas = getAllSchemas((schema) => schema);

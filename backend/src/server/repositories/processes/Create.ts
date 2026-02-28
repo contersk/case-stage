@@ -16,6 +16,11 @@ export interface ICreateProcessData {
   documents?: Array<{ title: string; url?: string | null }>;
 }
 
+/**
+ * Cria um novo processo no banco com todas as relações opcionais (tools, responsibles, documents).
+ * Utiliza nested create do Prisma para inserir o processo e suas relações em uma única operação.
+ * Retorna o processo criado com todas as relações incluídas.
+ */
 export const create = async (
   data: ICreateProcessData,
 ): Promise<IProcess | Error> => {

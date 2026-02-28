@@ -7,6 +7,16 @@ import { router } from "./routes/index";
 import { errorHandler } from "./shared/middleware";
 import { swaggerSpec } from "./swaggerConfig";
 
+/**
+ * Instância principal do Express.
+ * Configurações aplicadas:
+ * - CORS dinâmico via env CORS_ORIGIN (aceita múltiplas origens separadas por vírgula)
+ * - JSON body parsing
+ * - Morgan para logging de requisições (desabilitado em NODE_ENV=test)
+ * - Swagger UI servido em /api-docs
+ * - Router centralizado com todas as rotas da aplicação
+ * - Error handler global como último middleware
+ */
 const server = express();
 
 server.use(

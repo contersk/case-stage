@@ -10,6 +10,13 @@ import {
   PROCESS_TYPE_VALUES,
 } from "../../database/models";
 
+/**
+ * Schema completo de validação do body para criação de processo.
+ * Campos obrigatórios: title (3-255 chars), areaId (UUID).
+ * Campos opcionais: description, type, status, priority, startDate/endDate (ISO 8601),
+ *                   parentId (UUID), tools[], responsibles[], documents[].
+ * Valores default: type=Manual, status=Planejado, priority=Media.
+ */
 const processBodySchema = z.object({
   title: z
     .string()
@@ -63,6 +70,7 @@ export const createValidation = validation((getSchema) => ({
   body: getSchema<z.infer<typeof processBodySchema>>(processBodySchema),
 }));
 
+/** Handler HTTP para criação de processo. Retorna 201 Created com o processo e relações. */
 export const Create = async (
   req: Request,
   res: Response,

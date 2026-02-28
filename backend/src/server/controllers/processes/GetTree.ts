@@ -17,6 +17,11 @@ export const getTreeValidation = validation((getSchema) => ({
   ),
 }));
 
+/**
+ * Handler HTTP para buscar a árvore hierárquica de processos de uma área.
+ * Recebe o ID da área via params e retorna um array de IProcessTreeNode (recursivo).
+ * Utilizado pelo frontend para renderizar o grafo interativo com React Flow.
+ */
 export const getTree = async (
   req: Request<IParamProps>,
   res: Response,

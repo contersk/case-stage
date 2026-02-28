@@ -4,6 +4,16 @@ import type {
   IPaginatedResult,
 } from "./IProcessesRepository";
 
+/**
+ * Busca paginada de processos com filtros dinâmicos.
+ * Suporta filtros por:
+ * - search: busca case-insensitive em title e description (OR)
+ * - status, type, priority: filtro exato por enum
+ * - areaId: filtro por área
+ *
+ * Executa count e findMany em paralelo (Promise.all) para performance.
+ * Retorna dados paginados com metadata (total, page, limit, totalPages).
+ */
 export const getAll = async (
   page: number,
   limit: number,
