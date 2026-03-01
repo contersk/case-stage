@@ -301,7 +301,7 @@ export default function DashboardPage() {
                     }}
                     itemStyle={{ color: "hsl(var(--card-foreground))" }}
                     labelStyle={{ color: "hsl(var(--card-foreground))" }}
-                    cursor={{ fill: "hsl(var(--muted))" }}
+                    cursor={false}
                     formatter={(value) => [`${value}`, "Processos"]}
                   />
                   <Bar dataKey="value" radius={[0, 6, 6, 0]} barSize={32}>
@@ -377,7 +377,7 @@ export default function DashboardPage() {
                     }}
                     itemStyle={{ color: "hsl(var(--card-foreground))" }}
                     labelStyle={{ color: "hsl(var(--card-foreground))" }}
-                    cursor={{ fill: "hsl(var(--muted))" }}
+                    cursor={false}
                     formatter={(value) => [`${value}`, "Processos"]}
                   />
                   <Bar dataKey="value" radius={[0, 6, 6, 0]} barSize={32}>
@@ -422,8 +422,12 @@ export default function DashboardPage() {
                   const medal = medals[index];
 
                   return (
-                    <Link key={area.id} href={`/areas`} className="block group">
-                      <div className="flex items-center gap-3 rounded-lg p-2 transition-colors hover:bg-muted/50">
+                    <Link
+                      key={area.id}
+                      href={`/areas/${area.id}/tree`}
+                      className="block group"
+                    >
+                      <div className="flex items-center gap-3 rounded-lg p-2 transition-colors">
                         <span className="text-lg w-8 text-center shrink-0">
                           {medal ?? (
                             <span className="text-sm text-muted-foreground font-medium">

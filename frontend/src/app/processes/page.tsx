@@ -8,7 +8,6 @@ import {
   ChevronLeft,
   ChevronRight,
   Eye,
-  Pencil,
   Trash2,
   ArrowUpDown,
   ArrowUp,
@@ -322,11 +321,6 @@ export default function ProcessesPage() {
                         <Button variant="ghost" size="icon" asChild>
                           <Link href={`/processes/${proc.id}`}>
                             <Eye className="h-4 w-4" />
-                          </Link>
-                        </Button>
-                        <Button variant="ghost" size="icon" asChild>
-                          <Link href={`/processes/${proc.id}/edit`}>
-                            <Pencil className="h-4 w-4" />
                           </Link>
                         </Button>
                         <Button

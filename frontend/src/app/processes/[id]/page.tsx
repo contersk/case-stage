@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useParams } from "next/navigation";
 import { ArrowLeft, Pencil, Calendar, ExternalLink } from "lucide-react";
 import Link from "next/link";
@@ -10,15 +11,27 @@ import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import {
   StatusBadge,
   PriorityBadge,
   TypeBadge,
 } from "@/components/ui/status-badge";
-import { useProcess } from "@/features/processes";
+import { useProcess, useUpdateProcess } from "@/features/processes";
+import { ProcessForm } from "@/features/processes/components/process-form";
+import type { ProcessFormOutput } from "@/features/processes/components/process-form";
+import type { IUpdateProcessInput } from "@/types";
 
 export default function ProcessDetailPage() {
   const params = useParams<{ id: string }>();
   const { data: process, isLoading, isError, refetch } = useProcess(params.id);
+  const [editOpen, setEditOpen] = useState(false);
+  const updateMutation = useUpdateProcess();
 
   if (isLoading) {
     return (
@@ -63,11 +76,9 @@ export default function ProcessDetailPage() {
             <p className="text-muted-foreground">Área: {process.area.name}</p>
           </div>
         </div>
-        <Button asChild>
-          <Link href={`/processes/${process.id}/edit`}>
-            <Pencil className="mr-2 h-4 w-4" />
-            Editar
-          </Link>
+        <Button onClick={() => setEditOpen(true)}>
+          <Pencil className="mr-2 h-4 w-4" />
+          Editar
         </Button>
       </div>
 
@@ -252,6 +263,29 @@ export default function ProcessDetailPage() {
           </Card>
         </>
       )}
+
+      {/* Dialog Editar Processo */}
+      <Dialog open={editOpen} onOpenChange={setEditOpen}>
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Editar: {process.title}</DialogTitle>
+            <DialogDescription>Altere os dados do processo.</DialogDescription>
+          </DialogHeader>
+          <ProcessForm
+            defaultValues={process}
+            onSubmit={async (values: ProcessFormOutput) => {
+              await updateMutation.mutateAsync({
+                id: params.id,
+                data: values as unknown as IUpdateProcessInput,
+              });
+              setEditOpen(false);
+              refetch();
+            }}
+            isPending={updateMutation.isPending}
+            submitLabel="Salvar Alterações"
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -79,7 +79,7 @@ function AppSidebar() {
 
   return (
     <Sidebar variant="inset" collapsible="icon">
-      <SidebarHeader className="sticky top-0 z-20 border-b bg-sidebar px-4 py-3">
+      <SidebarHeader className="sticky top-0 z-20 border-b bg-sidebar px-4 pt-2 h-16 flex items-center">
         <Link
           href="/"
           className="flex items-center gap-2 font-semibold text-lg min-w-0"

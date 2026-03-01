@@ -363,11 +363,14 @@ export function ProcessForm({
                       <SelectValue placeholder="Selecione uma área" />
                     </SelectTrigger>
                     <SelectContent>
-                      {areas.data?.data.map((a) => (
-                        <SelectItem key={a.id} value={a.id}>
-                          {a.name}
-                        </SelectItem>
-                      ))}
+                      {areas.data?.data
+                        .slice()
+                        .sort((a, b) => a.name.localeCompare(b.name, "pt-BR"))
+                        .map((a) => (
+                          <SelectItem key={a.id} value={a.id}>
+                            {a.name}
+                          </SelectItem>
+                        ))}
                     </SelectContent>
                   </Select>
                 )}
@@ -396,6 +399,8 @@ export function ProcessForm({
                     <SelectContent>
                       <SelectItem value="none">Nenhum</SelectItem>
                       {parentProcesses.data?.data
+                        .slice()
+                        .sort((a, b) => a.title.localeCompare(b.title, "pt-BR"))
                         .filter((p) => p.id !== defaultValues?.id)
                         .map((p) => (
                           <SelectItem key={p.id} value={p.id}>
