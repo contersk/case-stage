@@ -8,6 +8,16 @@ import { errorHandler } from "./shared/middleware";
 import { swaggerSpec } from "./swaggerConfig";
 
 /**
+ * Origens permitidas para CORS.
+ * - Em produção, utiliza CORS_ORIGIN do .env (separadas por vírgula)
+ * - Qualquer deploy de preview do Vercel (*.vercel.app) é aceito automaticamente
+ * - Requisições sem origin (curl, Postman, mobile) são liberadas
+ */
+const allowedOrigins = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.split(",").map((o) => o.trim())
+  : ["http://localhost:3000", "http://localhost:5173"];
+
+/**
  * Instância principal do Express.
  * Configurações aplicadas:
  * - CORS dinâmico via env CORS_ORIGIN (aceita múltiplas origens separadas por vírgula)
@@ -21,7 +31,25 @@ const server = express();
 
 server.use(
   cors({
-    origin: process.env.CORS_ORIGIN?.split(",") || ["*"],
+    origin(origin, callback) {
+      // Permite requisições sem origin (curl, Postman, apps mobile)
+      if (!origin) return callback(null, true);
+
+      // Verifica lista explícita ou wildcard
+      if (allowedOrigins.includes(origin) || allowedOrigins.includes("*")) {
+        return callback(null, true);
+      }
+
+      // Aceita qualquer deploy Vercel (preview + production)
+      if (origin.endsWith(".vercel.app")) {
+        return callback(null, true);
+      }
+
+      return callback(new Error(`Origin ${origin} not allowed by CORS`));
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
 server.use(express.json());
