@@ -132,7 +132,7 @@ export default function AreasPage() {
 
       {/* Busca */}
       <div className="flex gap-2">
-        <div className="relative flex-1 max-w-sm">
+        <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             placeholder="Filtrar por nome..."
@@ -190,13 +190,23 @@ export default function AreasPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Nome</TableHead>
-                  <TableHead className="w-45 text-right">Ações</TableHead>
+                  <TableHead className="text-center">Processos</TableHead>
+                  <TableHead className="text-center">Criado em</TableHead>
+                  <TableHead className="w-35 text-right">Ações</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {data?.data.map((area) => (
                   <TableRow key={area.id}>
                     <TableCell className="font-medium">{area.name}</TableCell>
+                    <TableCell className="text-center">
+                      <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
+                        {area.processCount ?? 0}
+                      </span>
+                    </TableCell>
+                    <TableCell className="text-center text-muted-foreground text-sm">
+                      {new Date(area.createdAt).toLocaleDateString("pt-BR")}
+                    </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-1">
                         <Button variant="ghost" size="icon" asChild>

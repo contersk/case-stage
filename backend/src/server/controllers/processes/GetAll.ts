@@ -23,6 +23,8 @@ export interface IQueryProps {
   type?: string | undefined;
   priority?: string | undefined;
   areaId?: string | undefined;
+  orderBy?: string | undefined;
+  order?: string | undefined;
 }
 
 export const getAllValidation = validation((getSchema) => ({
@@ -35,6 +37,10 @@ export const getAllValidation = validation((getSchema) => ({
       type: z.string().optional(),
       priority: z.string().optional(),
       areaId: z.uuid().optional(),
+      orderBy: z
+        .enum(["title", "status", "type", "priority", "createdAt"])
+        .optional(),
+      order: z.enum(["asc", "desc"]).optional(),
     }),
   ),
 }));
@@ -59,6 +65,8 @@ export const getAll = async (
       type: req.query.type,
       priority: req.query.priority,
       areaId: req.query.areaId,
+      orderBy: req.query.orderBy,
+      order: req.query.order,
     });
     res.status(StatusCodes.OK).json(result);
   } catch (error) {

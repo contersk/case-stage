@@ -216,10 +216,13 @@ export default function DashboardPage() {
                   <Tooltip
                     contentStyle={{
                       borderRadius: "8px",
-                      border: "1px solid hsl(var(--border))",
+                      border: "none",
+                      boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
                       backgroundColor: "hsl(var(--card))",
                       color: "hsl(var(--card-foreground))",
                     }}
+                    itemStyle={{ color: "hsl(var(--card-foreground))" }}
+                    labelStyle={{ color: "hsl(var(--card-foreground))" }}
                     formatter={(value) => {
                       const v = Number(value) || 0;
                       const pct = totalProcessos
@@ -291,10 +294,14 @@ export default function DashboardPage() {
                   <Tooltip
                     contentStyle={{
                       borderRadius: "8px",
-                      border: "1px solid hsl(var(--border))",
+                      border: "none",
+                      boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
                       backgroundColor: "hsl(var(--card))",
                       color: "hsl(var(--card-foreground))",
                     }}
+                    itemStyle={{ color: "hsl(var(--card-foreground))" }}
+                    labelStyle={{ color: "hsl(var(--card-foreground))" }}
+                    cursor={{ fill: "hsl(var(--muted))" }}
                     formatter={(value) => [`${value}`, "Processos"]}
                   />
                   <Bar dataKey="value" radius={[0, 6, 6, 0]} barSize={32}>
@@ -363,10 +370,14 @@ export default function DashboardPage() {
                   <Tooltip
                     contentStyle={{
                       borderRadius: "8px",
-                      border: "1px solid hsl(var(--border))",
+                      border: "none",
+                      boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
                       backgroundColor: "hsl(var(--card))",
                       color: "hsl(var(--card-foreground))",
                     }}
+                    itemStyle={{ color: "hsl(var(--card-foreground))" }}
+                    labelStyle={{ color: "hsl(var(--card-foreground))" }}
+                    cursor={{ fill: "hsl(var(--muted))" }}
                     formatter={(value) => [`${value}`, "Processos"]}
                   />
                   <Bar dataKey="value" radius={[0, 6, 6, 0]} barSize={32}>

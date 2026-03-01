@@ -25,6 +25,8 @@ export interface IProcessFilters {
   type?: string;
   priority?: string;
   areaId?: string;
+  orderBy?: string;
+  order?: string;
 }
 
 /**

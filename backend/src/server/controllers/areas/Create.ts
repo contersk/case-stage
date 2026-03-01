@@ -11,6 +11,13 @@ import type { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import * as zod from "zod";
 
+import { AreasService } from "../../database/services/areas/AreasServices";
+import { validation } from "../../shared/middleware";
+
+export interface IBodyProps {
+  name: string;
+}
+
 /**
  * Schema de validação do body para criação de área.
  * Requer name com mínimo de 3 e máximo de 255 caracteres.

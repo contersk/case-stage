@@ -34,6 +34,8 @@ export interface IProcessesService {
       type?: string | undefined;
       priority?: string | undefined;
       areaId?: string | undefined;
+      orderBy?: string | undefined;
+      order?: string | undefined;
     },
   ): Promise<IPaginatedResult<IProcessWithRelations>>;
   getById(id: string): Promise<IProcessDetails>;

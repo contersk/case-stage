@@ -273,7 +273,7 @@ export function ProcessForm({
                 name="type"
                 render={({ field }) => (
                   <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -296,7 +296,7 @@ export function ProcessForm({
                 name="status"
                 render={({ field }) => (
                   <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -319,7 +319,7 @@ export function ProcessForm({
                 name="priority"
                 render={({ field }) => (
                   <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -359,7 +359,7 @@ export function ProcessForm({
                 name="areaId"
                 render={({ field }) => (
                   <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder="Selecione uma área" />
                     </SelectTrigger>
                     <SelectContent>
@@ -390,7 +390,7 @@ export function ProcessForm({
                     value={field.value || "none"}
                     onValueChange={(v) => field.onChange(v === "none" ? "" : v)}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder="Nenhum" />
                     </SelectTrigger>
                     <SelectContent>

@@ -8,7 +8,7 @@ export interface IAreasRepository {
     filter?: string,
   ): Promise<
     | {
-        data: IArea[];
+        data: (IArea & { processCount: number })[];
         total: number;
         page: number;
         limit: number;

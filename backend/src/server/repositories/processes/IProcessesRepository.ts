@@ -111,6 +111,8 @@ export interface IProcessesRepository {
       type?: string | undefined;
       priority?: string | undefined;
       areaId?: string | undefined;
+      orderBy?: string | undefined;
+      order?: string | undefined;
     },
   ): Promise<IPaginatedResult<IProcessWithRelations> | Error>;
   getById(id: string): Promise<IProcessDetails | null | Error>;

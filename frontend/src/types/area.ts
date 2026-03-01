@@ -9,6 +9,7 @@ export interface IArea {
   name: string;
   createdAt: string;
   updatedAt: string;
+  processCount?: number;
 }
 
 /** Dados necessários para criar/atualizar uma Área. */

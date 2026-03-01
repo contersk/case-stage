@@ -7,6 +7,8 @@
  * @module hooks/useDashboard
  */
 import { useQuery } from "@tanstack/react-query";
+import { queryKeys } from "@/lib/queryKeys";
+import { dashboardService } from "@/lib/dashboardService";
 
 /** Estatísticas de processos agrupados por status. */
 export function useStatsByStatus(areaId?: string) {

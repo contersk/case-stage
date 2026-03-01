@@ -10,7 +10,11 @@ import {
   Eye,
   Pencil,
   Trash2,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,7 +40,14 @@ import {
   PriorityBadge,
   TypeBadge,
 } from "@/components/ui/status-badge";
-import { useProcesses, useDeleteProcess } from "@/features/processes";
+import {
+  useProcesses,
+  useDeleteProcess,
+  useCreateProcess,
+} from "@/features/processes";
+import { ProcessForm } from "@/features/processes/components/process-form";
+import type { ProcessFormOutput } from "@/features/processes/components/process-form";
+import type { ICreateProcessInput } from "@/types";
 import { useAreas } from "@/features/areas";
 import type { IProcessFilters } from "@/features/processes";
 import {
@@ -50,7 +61,10 @@ import {
 import type { IProcessWithRelations } from "@/types";
 import Link from "next/link";
 
+type SortableColumn = "title" | "status" | "type" | "priority";
+
 export default function ProcessesPage() {
+  const router = useRouter();
   const [filters, setFilters] = useState<IProcessFilters>({
     page: 1,
     limit: 10,
@@ -58,10 +72,12 @@ export default function ProcessesPage() {
   const [searchInput, setSearchInput] = useState("");
   const [deleteTarget, setDeleteTarget] =
     useState<IProcessWithRelations | null>(null);
+  const [createOpen, setCreateOpen] = useState(false);
 
   const { data, isLoading, isError, refetch } = useProcesses(filters);
   const areas = useAreas(1, 100);
   const deleteMutation = useDeleteProcess();
+  const createMutation = useCreateProcess();
 
   function handleSearch() {
     setFilters((f) => ({ ...f, search: searchInput, page: 1 }));
@@ -82,6 +98,33 @@ export default function ProcessesPage() {
     }
   }
 
+  async function onCreateSubmit(values: ProcessFormOutput) {
+    await createMutation.mutateAsync(values as unknown as ICreateProcessInput);
+    setCreateOpen(false);
+  }
+
+  function toggleSort(column: SortableColumn) {
+    setFilters((f) => {
+      if (f.orderBy === column) {
+        if (f.order === "asc") return { ...f, order: "desc" };
+        // Already desc → remove sorting
+        const { orderBy: _, order: __, ...rest } = f;
+        return rest;
+      }
+      return { ...f, orderBy: column, order: "asc", page: 1 };
+    });
+  }
+
+  function SortIcon({ column }: { column: SortableColumn }) {
+    if (filters.orderBy !== column)
+      return <ArrowUpDown className="ml-1 h-3 w-3" />;
+    return filters.order === "asc" ? (
+      <ArrowUp className="ml-1 h-3 w-3" />
+    ) : (
+      <ArrowDown className="ml-1 h-3 w-3" />
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -92,17 +135,15 @@ export default function ProcessesPage() {
             Lista completa de processos mapeados.
           </p>
         </div>
-        <Button asChild>
-          <Link href="/processes/new">
-            <Plus className="mr-2 h-4 w-4" />
-            Novo Processo
-          </Link>
+        <Button onClick={() => setCreateOpen(true)}>
+          <Plus className="mr-2 h-4 w-4" />
+          Novo Processo
         </Button>
       </div>
 
       {/* Filtros */}
       <div className="flex flex-wrap gap-3">
-        <div className="relative flex-1 min-w-50 max-w-sm">
+        <div className="relative flex-1 min-w-50">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             placeholder="Pesquisar por título..."
@@ -210,11 +251,9 @@ export default function ProcessesPage() {
                 ? "Nenhum processo corresponde aos filtros."
                 : "Comece criando o primeiro processo."}
             </p>
-            <Button asChild>
-              <Link href="/processes/new">
-                <Plus className="mr-2 h-4 w-4" />
-                Criar primeiro processo
-              </Link>
+            <Button onClick={() => setCreateOpen(true)}>
+              <Plus className="mr-2 h-4 w-4" />
+              Criar primeiro processo
             </Button>
           </CardContent>
         </Card>
@@ -224,11 +263,43 @@ export default function ProcessesPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Título</TableHead>
+                  <TableHead>
+                    <button
+                      type="button"
+                      className="inline-flex items-center font-semibold hover:text-foreground"
+                      onClick={() => toggleSort("title")}
+                    >
+                      Título <SortIcon column="title" />
+                    </button>
+                  </TableHead>
                   <TableHead>Área</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Tipo</TableHead>
-                  <TableHead>Prioridade</TableHead>
+                  <TableHead>
+                    <button
+                      type="button"
+                      className="inline-flex items-center font-semibold hover:text-foreground"
+                      onClick={() => toggleSort("status")}
+                    >
+                      Status <SortIcon column="status" />
+                    </button>
+                  </TableHead>
+                  <TableHead>
+                    <button
+                      type="button"
+                      className="inline-flex items-center font-semibold hover:text-foreground"
+                      onClick={() => toggleSort("type")}
+                    >
+                      Tipo <SortIcon column="type" />
+                    </button>
+                  </TableHead>
+                  <TableHead>
+                    <button
+                      type="button"
+                      className="inline-flex items-center font-semibold hover:text-foreground"
+                      onClick={() => toggleSort("priority")}
+                    >
+                      Prioridade <SortIcon column="priority" />
+                    </button>
+                  </TableHead>
                   <TableHead className="w-35 text-right">Ações</TableHead>
                 </TableRow>
               </TableHeader>
@@ -331,6 +402,23 @@ export default function ProcessesPage() {
               Excluir
             </Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Dialog Criar Processo */}
+      <Dialog open={createOpen} onOpenChange={setCreateOpen}>
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Novo Processo</DialogTitle>
+            <DialogDescription>
+              Preencha os dados para criar um novo processo.
+            </DialogDescription>
+          </DialogHeader>
+          <ProcessForm
+            onSubmit={onCreateSubmit}
+            isPending={createMutation.isPending}
+            submitLabel="Criar Processo"
+          />
         </DialogContent>
       </Dialog>
     </div>

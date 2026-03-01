@@ -7,7 +7,7 @@ export const getAll = async (
   filter?: string,
 ): Promise<
   | {
-      data: IArea[];
+      data: (IArea & { processCount: number })[];
       total: number;
       page: number;
       limit: number;
@@ -16,7 +16,9 @@ export const getAll = async (
   | Error
 > => {
   try {
-    const where: Parameters<typeof prisma.area.findMany>[0]["where"] = {};
+    const where: NonNullable<
+      Parameters<typeof prisma.area.findMany>[0]
+    >["where"] = {};
 
     if (filter) {
       where.name = {
@@ -28,6 +30,9 @@ export const getAll = async (
     const [data, total] = await Promise.all([
       prisma.area.findMany({
         where,
+        include: {
+          _count: { select: { processes: true } },
+        },
         orderBy: { name: "asc" },
         skip: (page - 1) * limit,
         take: limit,
@@ -36,7 +41,13 @@ export const getAll = async (
     ]);
 
     return {
-      data,
+      data: data.map((a) => ({
+        id: a.id,
+        name: a.name,
+        createdAt: a.createdAt,
+        updatedAt: a.updatedAt,
+        processCount: a._count.processes,
+      })),
       total,
       page,
       limit,

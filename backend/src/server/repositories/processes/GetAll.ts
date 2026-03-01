@@ -23,6 +23,8 @@ export const getAll = async (
     type?: string | undefined;
     priority?: string | undefined;
     areaId?: string | undefined;
+    orderBy?: string | undefined;
+    order?: string | undefined;
   },
 ): Promise<IPaginatedResult<IProcessWithRelations> | Error> => {
   try {
@@ -51,7 +53,9 @@ export const getAll = async (
             select: { id: true, title: true, status: true, type: true },
           },
         },
-        orderBy: { createdAt: "desc" },
+        orderBy: filters?.orderBy
+          ? { [filters.orderBy]: filters.order ?? "asc" }
+          : { createdAt: "desc" },
         skip: (page - 1) * limit,
         take: limit,
       }),

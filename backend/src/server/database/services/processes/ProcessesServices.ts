@@ -155,6 +155,8 @@ class ProcessesServiceImpl implements IProcessesService {
       type?: string | undefined;
       priority?: string | undefined;
       areaId?: string | undefined;
+      orderBy?: string | undefined;
+      order?: string | undefined;
     },
   ): Promise<IPaginatedResult<IProcessWithRelations>> {
     const result = await this.processesRepository.getAll(page, limit, filters);
