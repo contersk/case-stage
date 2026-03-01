@@ -6,8 +6,7 @@ import {
   LayoutDashboard,
   FolderTree,
   GitBranch,
-  PanelLeftClose,
-  PanelLeftOpen,
+  ChevronLeft,
 } from "lucide-react";
 import {
   Sidebar,
@@ -41,33 +40,34 @@ const navItems = [
 ];
 
 /**
- * Botão de toggle integrado ao header da sidebar.
- * Fica fixo (não rola com o conteúdo) e posicionado no canto
- * superior direito do cabeçalho, seguindo o padrão da imagem de referência.
+ * Botão de toggle na borda da sidebar (estilo Plaky/Monday).
+ * Posicionado como absoluto dentro do container fixo da sidebar,
+ * ficando exatamente na borda direita, centralizado verticalmente.
+ * O chevron rotaciona suavemente conforme o estado.
  */
-function SidebarToggleButton() {
+function SidebarEdgeToggle() {
   const { open, toggleSidebar } = useSidebar();
 
   return (
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
-          variant="ghost"
+          variant="outline"
           size="icon"
           onClick={toggleSidebar}
-          className="h-7 w-7 shrink-0 text-muted-foreground hover:text-foreground transition-colors"
+          className="absolute -right-3 top-1/2 z-50 h-6 w-6 -translate-y-1/2 rounded-full border bg-background shadow-md hover:bg-accent hover:shadow-lg transition-all"
         >
-          {open ? (
-            <PanelLeftClose className="h-4 w-4" />
-          ) : (
-            <PanelLeftOpen className="h-4 w-4" />
-          )}
+          <ChevronLeft
+            className={`h-3.5 w-3.5 transition-transform duration-200 ${
+              open ? "" : "rotate-180"
+            }`}
+          />
           <span className="sr-only">
             {open ? "Recolher menu" : "Expandir menu"}
           </span>
         </Button>
       </TooltipTrigger>
-      <TooltipContent side="right" sideOffset={8}>
+      <TooltipContent side="right" sideOffset={12}>
         {open ? "Recolher menu" : "Expandir menu"}
       </TooltipContent>
     </Tooltip>
@@ -80,18 +80,15 @@ function AppSidebar() {
   return (
     <Sidebar variant="inset" collapsible="icon">
       <SidebarHeader className="sticky top-0 z-20 border-b bg-sidebar px-4 py-3">
-        <div className="flex items-center justify-between">
-          <Link
-            href="/"
-            className="flex items-center gap-2 font-semibold text-lg min-w-0"
-          >
-            <GitBranch className="h-5 w-5 shrink-0 text-primary" />
-            <span className="truncate group-data-[collapsible=icon]:hidden">
-              Case Stage
-            </span>
-          </Link>
-          <SidebarToggleButton />
-        </div>
+        <Link
+          href="/"
+          className="flex items-center gap-2 font-semibold text-lg min-w-0"
+        >
+          <GitBranch className="h-5 w-5 shrink-0 text-primary" />
+          <span className="truncate group-data-[collapsible=icon]:hidden">
+            Case Stage
+          </span>
+        </Link>
       </SidebarHeader>
 
       <SidebarContent>
@@ -113,6 +110,9 @@ function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
+      {/* Toggle na borda — posicionado dentro do container fixo */}
+      <SidebarEdgeToggle />
     </Sidebar>
   );
 }
@@ -120,7 +120,6 @@ function AppSidebar() {
 /**
  * Layout principal da aplicação (App Shell).
  * Renderiza a estrutura: Sidebar (navegação) + Header (breadcrumb + tema) + Main (conteúdo da página).
- * Toggle da sidebar é um botão circular flutuante na borda externa.
  */
 export function AppShell({ children }: { children: ReactNode }) {
   return (
