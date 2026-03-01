@@ -41,28 +41,26 @@ const navItems = [
 ];
 
 /**
- * Botão flutuante na borda externa da sidebar.
- * Segue o padrão de mercado (Linear, Notion, VS Code):
- * - Aparece no meio-vertical da borda direita da sidebar
- * - Ícone muda conforme estado aberto/fechado
- * - Tooltip com dica de ação
+ * Botão de toggle integrado ao header da sidebar.
+ * Fica fixo (não rola com o conteúdo) e posicionado no canto
+ * superior direito do cabeçalho, seguindo o padrão da imagem de referência.
  */
-function SidebarEdgeToggle() {
+function SidebarToggleButton() {
   const { open, toggleSidebar } = useSidebar();
 
   return (
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
-          variant="outline"
+          variant="ghost"
           size="icon"
           onClick={toggleSidebar}
-          className="absolute -right-3 top-1/2 z-30 h-6 w-6 -translate-y-1/2 rounded-full border bg-background shadow-sm hover:bg-accent transition-colors"
+          className="h-7 w-7 shrink-0 text-muted-foreground hover:text-foreground transition-colors"
         >
           {open ? (
-            <PanelLeftClose className="h-3 w-3" />
+            <PanelLeftClose className="h-4 w-4" />
           ) : (
-            <PanelLeftOpen className="h-3 w-3" />
+            <PanelLeftOpen className="h-4 w-4" />
           )}
           <span className="sr-only">
             {open ? "Recolher menu" : "Expandir menu"}
@@ -80,46 +78,42 @@ function AppSidebar() {
   const pathname = usePathname();
 
   return (
-    <div className="relative">
-      <Sidebar variant="inset" collapsible="icon">
-        <SidebarHeader className="border-b px-4 py-3">
+    <Sidebar variant="inset" collapsible="icon">
+      <SidebarHeader className="sticky top-0 z-20 border-b bg-sidebar px-4 py-3">
+        <div className="flex items-center justify-between">
           <Link
             href="/"
-            className="flex items-center gap-2 font-semibold text-lg"
+            className="flex items-center gap-2 font-semibold text-lg min-w-0"
           >
-            <GitBranch className="h-5 w-5 text-primary" />
-            <span className="group-data-[collapsible=icon]:hidden">
+            <GitBranch className="h-5 w-5 shrink-0 text-primary" />
+            <span className="truncate group-data-[collapsible=icon]:hidden">
               Case Stage
             </span>
           </Link>
-        </SidebarHeader>
+          <SidebarToggleButton />
+        </div>
+      </SidebarHeader>
 
-        <SidebarContent>
-          <SidebarGroup>
-            <SidebarGroupLabel>Navegação</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {navItems.map((item) => (
-                  <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={pathname === item.href}
-                    >
-                      <Link href={item.href}>
-                        <item.icon className="h-4 w-4" />
-                        <span>{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        </SidebarContent>
-      </Sidebar>
-
-      <SidebarEdgeToggle />
-    </div>
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel>Navegação</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {navItems.map((item) => (
+                <SidebarMenuItem key={item.href}>
+                  <SidebarMenuButton asChild isActive={pathname === item.href}>
+                    <Link href={item.href}>
+                      <item.icon className="h-4 w-4" />
+                      <span>{item.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+    </Sidebar>
   );
 }
 

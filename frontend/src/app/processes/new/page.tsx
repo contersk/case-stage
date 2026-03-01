@@ -20,7 +20,7 @@ export default function NewProcessPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="max-w-3xl mx-auto w-full space-y-6">
       {/* Header */}
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="icon" asChild>
@@ -37,7 +37,7 @@ export default function NewProcessPage() {
       </div>
 
       {/* Formulário */}
-      <div className="max-w-3xl mx-auto w-full">
+      <div>
         <ProcessForm
           onSubmit={handleSubmit}
           isPending={createMutation.isPending}
