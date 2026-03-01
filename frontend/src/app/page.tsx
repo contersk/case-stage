@@ -287,7 +287,7 @@ export default function DashboardPage() {
                     dataKey="name"
                     width={70}
                     tick={{
-                      fill: "hsl(var(--muted-foreground))",
+                      fill: "hsl(var(--foreground))",
                       fontSize: 12,
                     }}
                   />
@@ -363,7 +363,7 @@ export default function DashboardPage() {
                     dataKey="name"
                     width={80}
                     tick={{
-                      fill: "hsl(var(--muted-foreground))",
+                      fill: "hsl(var(--foreground))",
                       fontSize: 12,
                     }}
                   />
