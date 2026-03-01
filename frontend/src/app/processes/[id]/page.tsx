@@ -1,14 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import {
-  ArrowLeft,
-  Pencil,
-  Cpu,
-  Hand,
-  Calendar,
-  ExternalLink,
-} from "lucide-react";
+import { ArrowLeft, Pencil, Calendar, ExternalLink } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
@@ -16,24 +9,12 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  StatusBadge,
+  PriorityBadge,
+  TypeBadge,
+} from "@/components/ui/status-badge";
 import { useProcess } from "@/features/processes";
-
-const STATUS_LABELS: Record<string, string> = {
-  Planejado: "Planejado",
-  Em_Andamento: "Em Andamento",
-  Concluido: "Concluído",
-  Cancelado: "Cancelado",
-};
-
-const STATUS_VARIANTS: Record<
-  string,
-  "default" | "secondary" | "destructive" | "outline"
-> = {
-  Planejado: "secondary",
-  Em_Andamento: "default",
-  Concluido: "outline",
-  Cancelado: "destructive",
-};
 
 export default function ProcessDetailPage() {
   const params = useParams<{ id: string }>();
@@ -92,20 +73,9 @@ export default function ProcessDetailPage() {
 
       {/* Badges */}
       <div className="flex flex-wrap gap-2">
-        <Badge variant={STATUS_VARIANTS[process.status] ?? "secondary"}>
-          {STATUS_LABELS[process.status] ?? process.status}
-        </Badge>
-        <Badge variant="outline">
-          {process.type === "Sistemico" ? (
-            <Cpu className="mr-1 h-3 w-3" />
-          ) : (
-            <Hand className="mr-1 h-3 w-3" />
-          )}
-          {process.type === "Sistemico" ? "Sistêmico" : "Manual"}
-        </Badge>
-        <Badge variant="outline">
-          {process.priority === "Media" ? "Média" : process.priority}
-        </Badge>
+        <StatusBadge status={process.status} />
+        <TypeBadge type={process.type} />
+        <PriorityBadge priority={process.priority} />
       </div>
 
       {/* Descrição */}
@@ -274,9 +244,7 @@ export default function ProcessDetailPage() {
                     >
                       {child.title}
                     </Link>
-                    <Badge variant="outline" className="text-xs">
-                      {STATUS_LABELS[child.status] ?? child.status}
-                    </Badge>
+                    <StatusBadge status={child.status} />
                   </li>
                 ))}
               </ul>

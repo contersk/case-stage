@@ -30,8 +30,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  StatusBadge,
+  PriorityBadge,
+  TypeBadge,
+} from "@/components/ui/status-badge";
 import { useProcesses, useDeleteProcess } from "@/features/processes";
 import { useAreas } from "@/features/areas";
 import type { IProcessFilters } from "@/features/processes";
@@ -45,23 +49,6 @@ import {
 } from "@/components/ui/dialog";
 import type { IProcessWithRelations } from "@/types";
 import Link from "next/link";
-
-const STATUS_LABELS: Record<string, string> = {
-  Planejado: "Planejado",
-  Em_Andamento: "Em Andamento",
-  Concluido: "Concluído",
-  Cancelado: "Cancelado",
-};
-
-const STATUS_VARIANTS: Record<
-  string,
-  "default" | "secondary" | "destructive" | "outline"
-> = {
-  Planejado: "secondary",
-  Em_Andamento: "default",
-  Concluido: "outline",
-  Cancelado: "destructive",
-};
 
 export default function ProcessesPage() {
   const [filters, setFilters] = useState<IProcessFilters>({
@@ -251,17 +238,13 @@ export default function ProcessesPage() {
                     <TableCell className="font-medium">{proc.title}</TableCell>
                     <TableCell>{proc.area.name}</TableCell>
                     <TableCell>
-                      <Badge
-                        variant={STATUS_VARIANTS[proc.status] ?? "secondary"}
-                      >
-                        {STATUS_LABELS[proc.status] ?? proc.status}
-                      </Badge>
+                      <StatusBadge status={proc.status} />
                     </TableCell>
                     <TableCell>
-                      {proc.type === "Sistemico" ? "Sistêmico" : "Manual"}
+                      <TypeBadge type={proc.type} />
                     </TableCell>
                     <TableCell>
-                      {proc.priority === "Media" ? "Média" : proc.priority}
+                      <PriorityBadge priority={proc.priority} />
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-1">

@@ -26,4 +26,14 @@ export const queryKeys = {
     processTypes: ["metadata", "process-types"] as const,
     priorities: ["metadata", "priorities"] as const,
   },
+
+  dashboard: {
+    all: ["dashboard"] as const,
+    byStatus: (areaId?: string) =>
+      ["dashboard", "by-status", { areaId }] as const,
+    byArea: ["dashboard", "by-area"] as const,
+    byPriority: (areaId?: string) =>
+      ["dashboard", "by-priority", { areaId }] as const,
+    byType: (areaId?: string) => ["dashboard", "by-type", { areaId }] as const,
+  },
 } as const;

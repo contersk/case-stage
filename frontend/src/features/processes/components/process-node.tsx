@@ -2,22 +2,10 @@
 
 import { memo } from "react";
 import { Handle, Position, type NodeProps } from "@xyflow/react";
-import { Badge } from "@/components/ui/badge";
 import { Cpu, Hand, Users, Wrench, FileText } from "lucide-react";
-
-const STATUS_COLORS: Record<string, string> = {
-  Planejado: "bg-blue-500",
-  Em_Andamento: "bg-yellow-500",
-  Concluido: "bg-green-500",
-  Cancelado: "bg-red-500",
-};
-
-const STATUS_LABELS: Record<string, string> = {
-  Planejado: "Planejado",
-  Em_Andamento: "Em Andamento",
-  Concluido: "Concluído",
-  Cancelado: "Cancelado",
-};
+import { StatusBadge, PriorityBadge } from "@/components/ui/status-badge";
+import { STATUS_CONFIG } from "@/lib/statusConfig";
+import type { ProcessStatus } from "@/types";
 
 interface ProcessNodeData {
   label: string;
@@ -44,7 +32,8 @@ interface ProcessNodeData {
  */
 function ProcessNodeComponent({ data }: NodeProps) {
   const d = data as ProcessNodeData;
-  const dotColor = STATUS_COLORS[d.status] ?? "bg-gray-400";
+  const statusCfg = STATUS_CONFIG[d.status as ProcessStatus];
+  const dotColor = statusCfg?.dotColor ?? "bg-gray-400";
 
   return (
     <>
@@ -65,12 +54,11 @@ function ProcessNodeComponent({ data }: NodeProps) {
 
         {/* Status + Priority */}
         <div className="flex items-center gap-1.5 mb-2">
-          <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
-            {STATUS_LABELS[d.status] ?? d.status}
-          </Badge>
-          <Badge variant="outline" className="text-[10px] px-1.5 py-0">
-            {d.priority === "Media" ? "Média" : d.priority}
-          </Badge>
+          <StatusBadge status={d.status} className="text-[10px] px-1.5 py-0" />
+          <PriorityBadge
+            priority={d.priority}
+            className="text-[10px] px-1.5 py-0"
+          />
         </div>
 
         {/* Counters */}

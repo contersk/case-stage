@@ -10,29 +10,19 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useProcess } from "@/features/processes";
 import {
-  Users,
-  Wrench,
-  FileText,
-  Calendar,
-  Cpu,
-  Hand,
-  ExternalLink,
-} from "lucide-react";
+  StatusBadge,
+  PriorityBadge,
+  TypeBadge,
+} from "@/components/ui/status-badge";
+import { useProcess } from "@/features/processes";
+import { Users, Wrench, FileText, Calendar, ExternalLink } from "lucide-react";
 
 interface ProcessDetailSheetProps {
   processId: string | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
-
-const STATUS_LABELS: Record<string, string> = {
-  Planejado: "Planejado",
-  Em_Andamento: "Em Andamento",
-  Concluido: "Concluído",
-  Cancelado: "Cancelado",
-};
 
 /**
  * Sheet lateral (slide-over) que exibe os detalhes completos de um processo.
@@ -75,20 +65,9 @@ export function ProcessDetailSheet({
           <div className="space-y-6 mt-6">
             {/* Badges */}
             <div className="flex flex-wrap gap-2">
-              <Badge variant="secondary">
-                {STATUS_LABELS[process.status] ?? process.status}
-              </Badge>
-              <Badge variant="outline">
-                {process.type === "Sistemico" ? (
-                  <Cpu className="mr-1 h-3 w-3" />
-                ) : (
-                  <Hand className="mr-1 h-3 w-3" />
-                )}
-                {process.type === "Sistemico" ? "Sistêmico" : "Manual"}
-              </Badge>
-              <Badge variant="outline">
-                {process.priority === "Media" ? "Média" : process.priority}
-              </Badge>
+              <StatusBadge status={process.status} />
+              <TypeBadge type={process.type} />
+              <PriorityBadge priority={process.priority} />
             </div>
 
             {/* Descrição */}

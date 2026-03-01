@@ -37,7 +37,7 @@ export default function NewProcessPage() {
       </div>
 
       {/* Formulário */}
-      <div className="max-w-3xl">
+      <div className="max-w-3xl mx-auto w-full">
         <ProcessForm
           onSubmit={handleSubmit}
           isPending={createMutation.isPending}

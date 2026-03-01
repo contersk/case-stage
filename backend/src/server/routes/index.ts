@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { AreasController } from "../controllers/areas";
 import { ProcessesController } from "../controllers/processes";
+import { prisma } from "../database";
 
 /**
  * Router principal da aplicação.
@@ -69,6 +70,78 @@ router.delete(
   ProcessesController.deleteValidation,
   ProcessesController.deleteById,
 );
+
+// ==================== DASHBOARD ====================
+// Processes grouped by status (optional ?areaId=X filter)
+router.get("/dashboard/by-status", async (req, res, next) => {
+  try {
+    const areaId = req.query.areaId ? String(req.query.areaId) : null;
+    const result = await prisma.process.groupBy({
+      by: ["status"],
+      _count: true,
+      orderBy: { status: "asc" },
+      ...(areaId && { where: { areaId } }),
+    });
+    res.json(result.map((r) => ({ status: r.status, count: r._count })));
+  } catch (e) {
+    next(e);
+  }
+});
+
+// Areas ranked by process count (leaderboard)
+router.get("/dashboard/by-area", async (_req, res, next) => {
+  try {
+    const result = await prisma.area.findMany({
+      select: {
+        id: true,
+        name: true,
+        _count: { select: { processes: true } },
+      },
+      orderBy: { processes: { _count: "desc" } },
+    });
+    res.json(
+      result.map((r) => ({
+        id: r.id,
+        name: r.name,
+        processCount: r._count.processes,
+      })),
+    );
+  } catch (e) {
+    next(e);
+  }
+});
+
+// Processes grouped by priority (optional ?areaId=X filter)
+router.get("/dashboard/by-priority", async (req, res, next) => {
+  try {
+    const areaId = req.query.areaId ? String(req.query.areaId) : null;
+    const result = await prisma.process.groupBy({
+      by: ["priority"],
+      _count: true,
+      orderBy: { priority: "asc" },
+      ...(areaId && { where: { areaId } }),
+    });
+    res.json(result.map((r) => ({ priority: r.priority, count: r._count })));
+  } catch (e) {
+    next(e);
+  }
+});
+
+// Processes grouped by type (optional ?areaId=X filter)
+router.get("/dashboard/by-type", async (req, res, next) => {
+  try {
+    const areaId = req.query.areaId ? String(req.query.areaId) : null;
+    const result = await prisma.process.groupBy({
+      by: ["type"],
+      _count: true,
+      orderBy: { type: "asc" },
+      ...(areaId && { where: { areaId } }),
+    });
+    res.json(result.map((r) => ({ type: r.type, count: r._count })));
+  } catch (e) {
+    next(e);
+  }
+});
 
 // ==================== METADATA ====================
 // Status colors — visual intelligence for graph nodes
