@@ -68,6 +68,138 @@ case-stage/
 
 ---
 
+## Diagramas
+
+### Arquitetura do Backend
+
+O backend segue uma **arquitetura em camadas** com responsabilidades bem separadas:
+
+```mermaid
+flowchart LR
+    A["🟧 Route"]
+    B["🟨 Controller"]
+    C["🟩 Service"]
+    D["🟦 Repository"]
+    E["🟪 Prisma / Model"]
+
+    A -->|"HTTP Request"| B
+    B -->|"Dados validados (Zod)"| C
+    C -->|"Regras de negócio"| D
+    D -->|"Query Prisma"| E
+
+    style A fill:#F28C28,stroke:#c96d1a,color:#fff
+    style B fill:#A9A9A9,stroke:#808080,color:#fff
+    style C fill:#F5C518,stroke:#c99e13,color:#fff
+    style D fill:#4A90D9,stroke:#3570a8,color:#fff
+    style E fill:#7CB342,stroke:#5d8a30,color:#fff
+```
+
+### Modelo Entidade-Relacionamento (MER)
+
+Diagrama conceitual das entidades e seus relacionamentos:
+
+```mermaid
+erDiagram
+    Area ||--o{ Process : "possui"
+    Process ||--o{ Tool : "utiliza"
+    Process ||--o{ Responsible : "tem"
+    Process ||--o{ Document : "referencia"
+    Process o|--o| Process : "pai / filho"
+
+    Area {
+        UUID id PK
+        VARCHAR name UK
+    }
+    Process {
+        UUID id PK
+        VARCHAR title
+        TEXT description
+        ENUM type
+        ENUM status
+        ENUM priority
+        TIMESTAMP start_date
+        TIMESTAMP end_date
+        UUID area_id FK
+        UUID parent_id FK
+    }
+    Tool {
+        UUID id PK
+        VARCHAR name
+        UUID process_id FK
+    }
+    Responsible {
+        UUID id PK
+        VARCHAR name
+        VARCHAR role
+        UUID process_id FK
+    }
+    Document {
+        UUID id PK
+        VARCHAR title
+        TEXT url
+        UUID process_id FK
+    }
+```
+
+### Modelo Lógico Relacional (MLR)
+
+Visão detalhada das tabelas, colunas e chaves do banco PostgreSQL:
+
+```mermaid
+classDiagram
+    direction LR
+
+    class areas {
+        +UUID id PK
+        +VARCHAR~255~ name UNIQUE
+        +TIMESTAMP created_at
+        +TIMESTAMP updated_at
+    }
+
+    class processes {
+        +UUID id PK
+        +VARCHAR~255~ title
+        +TEXT description
+        +ENUM~process_type~ type
+        +ENUM~process_status~ status
+        +ENUM~process_priority~ priority
+        +TIMESTAMP start_date
+        +TIMESTAMP end_date
+        +UUID area_id FK
+        +UUID parent_id FK~self~
+        +TIMESTAMP created_at
+        +TIMESTAMP updated_at
+    }
+
+    class tools {
+        +UUID id PK
+        +VARCHAR~255~ name
+        +UUID process_id FK
+    }
+
+    class responsibles {
+        +UUID id PK
+        +VARCHAR~255~ name
+        +VARCHAR~255~ role
+        +UUID process_id FK
+    }
+
+    class documents {
+        +UUID id PK
+        +VARCHAR~255~ title
+        +TEXT url
+        +UUID process_id FK
+    }
+
+    areas "1" --> "*" processes : area_id
+    processes "1" --> "*" tools : process_id
+    processes "1" --> "*" responsibles : process_id
+    processes "1" --> "*" documents : process_id
+    processes "0..1" --> "*" processes : parent_id
+```
+
+---
+
 ## Modelo de Dados
 
 O banco PostgreSQL contém **5 tabelas** conectadas:
