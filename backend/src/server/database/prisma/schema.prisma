@@ -2,28 +2,51 @@ generator client {
   provider = "prisma-client-js"
 }
 
+/// Gerador de documentação HTML do banco de dados.
+/// Após rodar `npx prisma generate`, a documentação será criada em ./docs.
+generator docs {
+  provider = "node node_modules/prisma-docs-generator"
+  output   = "../../../../../docs/database"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
+/// Nível de prioridade de um processo organizacional.
+/// Utilizado para classificação e filtragem no dashboard.
 enum process_priority {
+  /// Prioridade alta — requer ação imediata
   Alta
+  /// Prioridade média — acompanhamento regular
   Media
+  /// Prioridade baixa — pode ser tratado posteriormente
   Baixa
 }
 
+/// Tipo de execução do processo.
 enum process_type {
+  /// Processo automatizado por sistema
   Sistemico
+  /// Processo executado manualmente por pessoas
   Manual
 }
 
+/// Status do ciclo de vida de um processo.
 enum process_status {
+  /// Processo planejado, ainda não iniciado
   Planejado
+  /// Processo em execução — requer atenção
   Em_Andamento
+  /// Processo finalizado com sucesso
   Concluido
+  /// Processo cancelado — inativo
   Cancelado
 }
+
+/// Área organizacional (ex: RH, TI, Financeiro).
+/// Cada área agrupa um conjunto de processos hierárquicos.
 model Area {
   id        String    @id @default(uuid()) @map("id") 
   name      String    @unique @map("name") @db.VarChar(255)
@@ -35,6 +58,8 @@ model Area {
   @@map("areas")
 }
 
+/// Processo organizacional com suporte a hierarquia (árvore pai-filho).
+/// Cada processo pertence a uma Área e pode conter ferramentas, responsáveis e documentos.
 model Process {
   id          String    @id @default(uuid()) @map("id")
   title       String    @map("title") @db.VarChar(255)
@@ -71,6 +96,7 @@ model Process {
   @@map("processes")
 }
 
+/// Ferramenta/sistema utilizado na execução de um processo.
 model Tool {
   id        String  @id @default(uuid()) @map("id")
   name      String  @map("name") @db.VarChar(255)
@@ -82,6 +108,7 @@ model Tool {
   @@map("tools")
 }
 
+/// Pessoa responsável por um processo, com cargo/função opcional.
 model Responsible {
   id        String  @id @default(uuid()) @map("id")
   name      String  @map("name") @db.VarChar(255)
@@ -94,6 +121,7 @@ model Responsible {
   @@map("responsibles")
 }
 
+/// Documento associado a um processo (manuais, procedimentos, links externos).
 model Document {
   id        String  @id @default(uuid()) @map("id")
   title     String  @map("title") @db.VarChar(255)

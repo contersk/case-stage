@@ -1,3 +1,12 @@
+/**
+ * @file Controller para obter a árvore hierárquica de processos de uma Área.
+ *
+ * Retorna todos os processos da área organizados em estrutura de árvore
+ * (pai → filhos recursivamente), usada para renderização no React Flow.
+ *
+ * @route GET /areas/:id/tree
+ * @returns 200 OK com `IProcessTreeNode[]`.
+ */
 import type { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";

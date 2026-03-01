@@ -1,7 +1,14 @@
+/**
+ * @file Hooks de Dashboard — estatísticas agregadas.
+ *
+ * Consomem o `dashboardService` e permitem filtro opcional
+ * por área através do parâmetro `areaId`.
+ *
+ * @module hooks/useDashboard
+ */
 import { useQuery } from "@tanstack/react-query";
-import { queryKeys } from "@/lib/queryKeys";
-import { dashboardService } from "@/lib/dashboardService";
 
+/** Estatísticas de processos agrupados por status. */
 export function useStatsByStatus(areaId?: string) {
   return useQuery({
     queryKey: queryKeys.dashboard.byStatus(areaId),

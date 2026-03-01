@@ -1,3 +1,18 @@
+/**
+ * Visualização em grafo da árvore hierárquica de processos.
+ *
+ * Converte a estrutura `IProcessTreeNode[]` (retornada pelo endpoint
+ * `/areas/:id/tree`) em nós e arestas do React Flow.
+ *
+ * Features:
+ * - Layout automático em árvore (horizontal por profundidade)
+ * - Arestas animadas com setas
+ * - MiniMap e Controls integrados
+ * - Clique em nó abre o `ProcessDetailSheet`
+ *
+ * @see ProcessNode — componente de nó customizado
+ * @see ProcessDetailSheet — painel lateral de detalhes
+ */
 "use client";
 
 import { useCallback, useMemo } from "react";

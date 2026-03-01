@@ -1,3 +1,17 @@
+/**
+ * @file Camada de serviço para Processos organizacionais.
+ *
+ * Centraliza todas as regras de negócio de processos:
+ * - Valida existência da Área vinculada
+ * - Impede auto-referência (processo pai de si mesmo)
+ * - Garante que pai e filho pertencem à mesma Área
+ * - Valida coerência de datas (startDate ≤ endDate)
+ * - Monta árvore hierárquica para o endpoint /tree
+ *
+ * Fluxo: Controller → **Service** → Repository → Prisma.
+ *
+ * @module services/ProcessesService
+ */
 import { ProcessesRepository } from "../../../repositories/processes";
 import { AreasRepository } from "../../../repositories/areas";
 import type { IAreasRepository } from "../../../repositories/areas/IAreasRepository";

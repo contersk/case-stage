@@ -1,3 +1,12 @@
+/**
+ * @file Controller para exclusão de um Processo por ID.
+ *
+ * A exclusão é em cascata: subprocessos, tools, responsibles e
+ * documents vinculados também são removidos automaticamente.
+ *
+ * @route DELETE /processes/:id
+ * @returns 204 No Content.
+ */
 import type { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";

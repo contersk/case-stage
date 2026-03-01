@@ -6,6 +6,21 @@
  * - Invalidar queryKeys.areas.all invalida TODAS as queries de áreas
  * - Invalidar queryKeys.processes.detail(id) invalida só o detalhe específico
  */
+/**
+ * @file Fábrica hierárquica de query keys para TanStack Query.
+ *
+ * Centraliza todas as chaves de cache usadas pela aplicação.
+ * Seguir o padrão de `queryKeys.domain.action(params)` garante
+ * invalidação granular sem acoplar componentes.
+ *
+ * @example
+ * ```ts
+ * queryKeys.areas.list(1, 20)       // ["areas", "list", { page: 1, limit: 20 }]
+ * queryKeys.processes.detail("uuid") // ["processes", "detail", "uuid"]
+ * ```
+ *
+ * @module lib/queryKeys
+ */
 export const queryKeys = {
   areas: {
     all: ["areas"] as const,

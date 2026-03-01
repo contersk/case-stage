@@ -1,3 +1,11 @@
+/**
+ * @file Controller para listagem paginada de Áreas.
+ *
+ * Suporta filtro por nome (`?filter=`) e paginação (`?page=&limit=`).
+ *
+ * @route GET /areas
+ * @returns 200 OK com `{ data, total, page, limit, totalPages }`.
+ */
 import type { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
@@ -5,6 +13,7 @@ import { z } from "zod";
 import { AreasService } from "../../database/services/areas/AreasServices";
 import { validation } from "../../shared/middleware";
 
+/** Parâmetros de query aceitos na listagem de áreas. */
 export interface IQueryProps {
   page?: string | undefined;
   limit?: string | undefined;

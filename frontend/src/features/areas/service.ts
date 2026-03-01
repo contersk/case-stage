@@ -1,3 +1,11 @@
+/**
+ * @file Serviço HTTP para o domínio de Áreas.
+ *
+ * Encapsula as chamadas REST para os endpoints `/areas`.
+ * Usado pelos hooks `useAreas`, `useCreateArea`, etc.
+ *
+ * @module features/areas/service
+ */
 import { api } from "@/lib/axios";
 import type { IArea, IAreaFormData, IPaginatedResult } from "@/types";
 

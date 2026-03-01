@@ -11,7 +11,8 @@
     "test": "vitest run --fileParallelism=false",
     "dev": "tsx watch src/server.ts",
     "build": "npx prisma generate",
-    "start": "tsx ./src/index.ts"
+    "start": "tsx ./src/index.ts",
+    "prisma:docs": "npx prisma generate && echo 'Documentação do banco gerada em docs/database/'"
   },
   "dependencies": {
     "@prisma/client": "^6.19.2",
@@ -35,6 +36,7 @@
     "@types/supertest": "^7.2.0",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.7",
+    "prisma-docs-generator": "^0.8.0",
     "supertest": "^7.2.2",
     "vitest": "^4.0.18"
   }

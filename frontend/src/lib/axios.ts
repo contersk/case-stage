@@ -1,3 +1,14 @@
+/**
+ * @file Configuração do cliente HTTP (Axios).
+ *
+ * Exporta uma instância pré-configurada com `baseURL` apontando para
+ * a API (`NEXT_PUBLIC_API_BASE_URL`).
+ *
+ * Também exporta `extractApiError()` que normaliza 3 formatos
+ * de erro da API em uma string legível para o usuário.
+ *
+ * @module lib/axios
+ */
 import axios from "axios";
 import type { IApiErrorResponse } from "@/types";
 

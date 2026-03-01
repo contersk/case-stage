@@ -1,3 +1,19 @@
+/**
+ * @file Middleware de validação genérico baseado em Zod.
+ *
+ * Cria middlewares reutilizáveis que validam `body`, `params`, `query`
+ * e `header` contra schemas Zod. Erros de validação retornam 400
+ * com os campos inválidos agrupados por localização.
+ *
+ * @example
+ * ```ts
+ * export const createValidation = validation((getSchema) => ({
+ *   body: getSchema<IBodyProps>(bodySchema),
+ * }));
+ * ```
+ *
+ * @module middleware/validation
+ */
 import type { RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
 import type { ZodType } from "zod";

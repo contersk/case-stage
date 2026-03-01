@@ -1,3 +1,16 @@
+/**
+ * @file Definição centralizada de todas as rotas da API.
+ *
+ * Organização:
+ * - `/` — Health check
+ * - `/areas` — CRUD de Áreas organizacionais
+ * - `/areas/:id/tree` — Árvore hierárquica de processos de uma área
+ * - `/processes` — CRUD de Processos
+ * - `/dashboard/*` — Estatísticas agregadas para o painel
+ * - `/metadata/*` — Metadados estáticos (cores, tipos, prioridades)
+ *
+ * @module routes
+ */
 import { Router } from "express";
 import { AreasController } from "../controllers/areas";
 import { ProcessesController } from "../controllers/processes";

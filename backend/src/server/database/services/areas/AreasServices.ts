@@ -1,3 +1,14 @@
+/**
+ * @file Camada de serviço para Áreas organizacionais.
+ *
+ * Contém as regras de negócio:
+ * - Nome da área deve ser único
+ * - Valida existência antes de get/update/delete
+ *
+ * Fluxo: Controller → **Service** → Repository → Prisma.
+ *
+ * @module services/AreasService
+ */
 import { AreasRepository } from "../../../repositories/areas";
 import type { IAreasRepository } from "../../../repositories/areas/IAreasRepository";
 import {

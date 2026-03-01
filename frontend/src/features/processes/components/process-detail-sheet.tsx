@@ -1,3 +1,12 @@
+/**
+ * Painel lateral (Sheet) com detalhes completos de um processo.
+ *
+ * Aberto ao clicar em um nó na árvore de processos.
+ * Exibe todas as informações: status, prioridade, tipo, datas,
+ * responsáveis, ferramentas e documentos do processo selecionado.
+ *
+ * Usa o hook `useProcess(id)` para buscar dados sob demanda.
+ */
 "use client";
 
 import {

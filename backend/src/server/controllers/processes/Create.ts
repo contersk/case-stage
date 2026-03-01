@@ -1,11 +1,17 @@
+/**
+ * @file Controller para criação de um novo Processo organizacional.
+ *
+ * Validação: título (3–255 chars), areaId (UUID), enums, datas ISO 8601,
+ *            arrays opcionais de tools/responsibles/documents.
+ * Regras de negócio (service): área existente, parentId válido,
+ *            mesma área do pai, dateRange coerente.
+ *
+ * @route POST /processes
+ * @returns 201 Created com o processo criado (inclui relações).
+ */
 import type { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
-
-import { ProcessesService } from "../../database/services/processes/ProcessesServices";
-import { validation } from "../../shared/middleware";
-import {
-  PROCESS_STATUS_VALUES,
   PROCESS_PRIORITY_VALUES,
   PROCESS_TYPE_VALUES,
 } from "../../database/models";

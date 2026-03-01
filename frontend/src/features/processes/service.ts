@@ -1,3 +1,11 @@
+/**
+ * @file Serviço HTTP para o domínio de Processos.
+ *
+ * Encapsula as chamadas REST para `/processes` e `/areas/:id/tree`.
+ * Usado pelos hooks `useProcesses`, `useCreateProcess`, etc.
+ *
+ * @module features/processes/service
+ */
 import { api } from "@/lib/axios";
 import type {
   IProcessWithRelations,

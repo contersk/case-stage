@@ -1,3 +1,11 @@
+/**
+ * @file Hooks de Metadados estáticos.
+ *
+ * Cacheados com `staleTime: Infinity` pois os dados
+ * (cores de status, tipos, prioridades) não mudam em runtime.
+ *
+ * @module hooks/useMetadata
+ */
 "use client";
 
 import { useQuery } from "@tanstack/react-query";

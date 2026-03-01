@@ -1,12 +1,15 @@
+/**
+ * @file Controller para criação de uma nova Área organizacional.
+ *
+ * Validação: nome com 3–255 caracteres.
+ * Regra de negócio: nome deve ser único (validado no service).
+ *
+ * @route POST /areas
+ * @returns 201 Created com o objeto da área criada.
+ */
 import type { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import * as zod from "zod";
-
-import { AreasService } from "../../database/services/areas/AreasServices";
-import { validation } from "../../shared/middleware";
-import type { IArea } from "../../database/models";
-
-export interface IBodyProps extends Omit<IArea, "id"> {}
 
 /**
  * Schema de validação do body para criação de área.

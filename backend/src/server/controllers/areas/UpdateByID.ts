@@ -1,3 +1,9 @@
+/**
+ * @file Controller para atualização de uma Área por ID.
+ *
+ * @route PUT /areas/:id
+ * @returns 200 OK com a área atualizada.
+ */
 import type { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
@@ -10,6 +16,7 @@ export interface IParamProps {
   id?: string;
 }
 
+/** Campos atualizáveis de uma área (todos opcionais). */
 export interface IBodyProps {
   name?: string | undefined;
 }

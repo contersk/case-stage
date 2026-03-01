@@ -1,3 +1,9 @@
+/**
+ * @file Controller para busca de uma Área por ID.
+ *
+ * @route GET /areas/:id
+ * @returns 200 OK com o objeto da área ou 404 se não encontrada.
+ */
 import type { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
@@ -9,6 +15,7 @@ export interface IParamProps {
   id?: string;
 }
 
+/** Validação: `id` deve ser UUID válido. */
 export const getByIdValidation = validation((getSchema) => ({
   params: getSchema<IParamProps>(
     z.object({

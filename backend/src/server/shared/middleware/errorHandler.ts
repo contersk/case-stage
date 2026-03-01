@@ -1,3 +1,14 @@
+/**
+ * @file Middleware global de tratamento de erros.
+ *
+ * Intercepta todos os erros lançados nos controllers/services
+ * e retorna respostas JSON padronizadas:
+ * - Erros Zod → 400 com lista de validações
+ * - AppError → status customizado com mensagem
+ * - Outros → 500 "Erro interno do servidor"
+ *
+ * @module middleware/errorHandler
+ */
 import type { Request, Response, NextFunction } from "express";
 import { AppError } from "../utils/CustomErrors";
 

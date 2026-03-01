@@ -1,3 +1,11 @@
+/**
+ * @file Controller para exclusão de uma Área por ID.
+ *
+ * A exclusão é em cascata: todos os processos vinculados também são removidos.
+ *
+ * @route DELETE /areas/:id
+ * @returns 204 No Content.
+ */
 import type { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";

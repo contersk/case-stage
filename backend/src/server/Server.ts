@@ -1,3 +1,16 @@
+/**
+ * @file Configuração central do servidor Express.
+ *
+ * Middlewares registrados (em ordem):
+ * 1. **CORS** — origens dinâmicas via `CORS_ORIGIN` (aceita `*.vercel.app` automaticamente)
+ * 2. **JSON parser** — `express.json()`
+ * 3. **Morgan** — logger HTTP (desativado em ambiente de teste)
+ * 4. **Swagger UI** — disponível em `/api-docs`
+ * 5. **Router** — rotas da aplicação
+ * 6. **Error Handler** — middleware global de tratamento de erros
+ *
+ * @module Server
+ */
 import express from "express";
 import "dotenv/config";
 import cors from "cors";
@@ -12,6 +25,11 @@ import { swaggerSpec } from "./swaggerConfig";
  * - Em produção, utiliza CORS_ORIGIN do .env (separadas por vírgula)
  * - Qualquer deploy de preview do Vercel (*.vercel.app) é aceito automaticamente
  * - Requisições sem origin (curl, Postman, mobile) são liberadas
+ */
+/**
+ * Lista de origens permitidas pelo CORS.
+ * Aceita variável de ambiente `CORS_ORIGIN` (separada por vírgula).
+ * Padrão: `http://localhost:3000` e `http://localhost:5173`.
  */
 const allowedOrigins = process.env.CORS_ORIGIN
   ? process.env.CORS_ORIGIN.split(",").map((o) => o.trim())

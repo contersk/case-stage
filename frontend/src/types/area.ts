@@ -1,3 +1,9 @@
+/**
+ * @file Tipos do domínio de Áreas.
+ * @module types/area
+ */
+
+/** Representa uma Área organizacional retornada pela API. */
 export interface IArea {
   id: string;
   name: string;
@@ -5,6 +11,7 @@ export interface IArea {
   updatedAt: string;
 }
 
+/** Dados necessários para criar/atualizar uma Área. */
 export interface IAreaFormData {
   name: string;
 }

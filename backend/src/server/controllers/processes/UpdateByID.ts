@@ -1,3 +1,13 @@
+/**
+ * @file Controller para atualização parcial de um Processo por ID.
+ *
+ * Todos os campos são opcionais. Relações (tools, responsibles, documents)
+ * seguem estratégia de *replace*: registros anteriores são removidos e
+ * substituídos pelos novos enviados no body.
+ *
+ * @route PUT /processes/:id
+ * @returns 200 OK com o processo atualizado.
+ */
 import type { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";

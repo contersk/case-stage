@@ -190,6 +190,51 @@ npm run dev
 
 ---
 
+## Documentação
+
+### API (Swagger)
+
+A documentação interativa da API está disponível em `/api-docs` (Swagger UI) ao rodar o backend.
+
+### Banco de Dados (Prisma Docs)
+
+O projeto utiliza o `prisma-docs-generator` para gerar documentação visual do banco de dados:
+
+```bash
+cd backend
+npm run prisma:docs
+```
+
+A documentação HTML é gerada em `docs/database/` e pode ser aberta diretamente no navegador.
+
+### Documentação Inline
+
+Todos os arquivos-chave possuem **JSDoc** com:
+
+- `@file` — descrição do propósito do arquivo
+- `@route` — endpoint HTTP (nos controllers)
+- `@module` — módulo lógico
+- Comentários em interfaces e tipos importantes
+
+### READMEs por Pasta
+
+Cada camada da aplicação possui um `README.md` explicando sua estrutura e padrões:
+
+| Pasta                              | Conteúdo do README                       |
+| ---------------------------------- | ---------------------------------------- |
+| `backend/src/server/controllers/`  | Padrão controller, fluxo de requisição   |
+| `backend/src/server/database/`     | Models, services, schema Prisma          |
+| `backend/src/server/repositories/` | Padrão repositório, estratégia de update |
+| `backend/src/server/routes/`       | Tabela de endpoints e filtros            |
+| `backend/src/server/shared/`       | Middlewares e erros customizados         |
+| `frontend/src/features/`           | Feature-Sliced Design, padrão de módulo  |
+| `frontend/src/components/`         | Providers, layout, componentes shadcn/ui |
+| `frontend/src/lib/`                | Axios, queryKeys, statusConfig           |
+| `frontend/src/types/`              | Interfaces e enums TypeScript            |
+| `frontend/src/hooks/`              | Hooks globais vs hooks de feature        |
+
+---
+
 ## Testes
 
 ```bash

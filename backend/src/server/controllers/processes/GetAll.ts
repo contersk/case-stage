@@ -1,3 +1,12 @@
+/**
+ * @file Controller para listagem paginada de Processos.
+ *
+ * Suporta filtros: `?search=`, `?status=`, `?type=`, `?priority=`, `?areaId=`
+ * e paginação (`?page=&limit=`).
+ *
+ * @route GET /processes
+ * @returns 200 OK com `{ data, total, page, limit, totalPages }`.
+ */
 import type { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
@@ -5,6 +14,7 @@ import { z } from "zod";
 import { ProcessesService } from "../../database/services/processes/ProcessesServices";
 import { validation } from "../../shared/middleware";
 
+/** Parâmetros de query aceitos na listagem de processos. */
 export interface IQueryProps {
   page?: string | undefined;
   limit?: string | undefined;

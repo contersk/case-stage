@@ -1,5 +1,15 @@
+/**
+ * @file Serviço HTTP para endpoints de Metadados.
+ *
+ * Fornece configurações estáticas da API (cores de status,
+ * tipos de processo, prioridades) que são cacheadas com
+ * `staleTime: Infinity` nos hooks.
+ *
+ * @module lib/metadataService
+ */
 import { api } from "@/lib/axios";
 
+/** Configuração de cor e label de um status. */
 export interface IStatusColorMeta {
   color: string;
   label: string;

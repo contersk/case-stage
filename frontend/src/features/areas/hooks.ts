@@ -1,3 +1,11 @@
+/**
+ * @file React Query hooks para o domínio de Áreas.
+ *
+ * Cada hook encapsula uma operação (query ou mutation)
+ * e cuida automaticamente de invalidação de cache e toasts.
+ *
+ * @module features/areas/hooks
+ */
 "use client";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";

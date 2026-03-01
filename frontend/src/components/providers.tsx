@@ -1,3 +1,13 @@
+/**
+ * Providers globais da aplicação.
+ *
+ * Envolve toda a árvore de componentes com:
+ * - **QueryClientProvider** (TanStack Query) — cache e estado do servidor
+ * - **ThemeProvider** (next-themes) — suporte a dark/light mode
+ * - **TooltipProvider** (Radix) — tooltips globais
+ * - **Toaster** (Sonner) — notificações toast
+ * - **ReactQueryDevtools** — debug do cache em desenvolvimento
+ */
 "use client";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";

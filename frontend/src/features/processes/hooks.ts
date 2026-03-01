@@ -1,3 +1,11 @@
+/**
+ * @file React Query hooks para o domínio de Processos.
+ *
+ * Mutações invalidam tanto `processes` quanto `areas` (pois árvores
+ * de área dependem dos processos atualizados).
+ *
+ * @module features/processes/hooks
+ */
 "use client";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";

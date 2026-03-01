@@ -1,3 +1,16 @@
+/**
+ * Nó customizado para o React Flow.
+ *
+ * Exibe um card compacto com:
+ * - Dot colorido indicando o status
+ * - Ícone de tipo (Sistêmico/Manual)
+ * - Badges de status e prioridade
+ * - Contadores de responsáveis, ferramentas, documentos e subprocessos
+ *
+ * Usado pelo componente `ProcessTreeFlow` na página de árvore.
+ *
+ * @see ProcessTreeFlow
+ */
 "use client";
 
 import { memo } from "react";
