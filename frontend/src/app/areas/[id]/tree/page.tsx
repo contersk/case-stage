@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useParams } from "next/navigation";
-import { ArrowLeft, GitBranch } from "lucide-react";
+import { ArrowLeft, GitBranch, FolderTree } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
@@ -40,28 +40,36 @@ export default function AreaTreePage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" asChild>
-          <Link href="/areas">
-            <ArrowLeft className="h-4 w-4" />
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Button variant="ghost" size="icon" asChild>
+            <Link href={`/areas/${areaId}`}>
+              <ArrowLeft className="h-4 w-4" />
+            </Link>
+          </Button>
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight flex items-center gap-2">
+              {areaLoading ? (
+                <Skeleton className="h-8 w-48" />
+              ) : (
+                <>
+                  <GitBranch className="h-5 w-5 text-primary" />
+                  {area?.name ?? "Área"} — Árvore de Processos
+                </>
+              )}
+            </h2>
+            <p className="text-muted-foreground">
+              Visualize a hierarquia completa de processos desta área. Clique em
+              um nó para ver os detalhes.
+            </p>
+          </div>
+        </div>
+        <Button variant="outline" asChild>
+          <Link href={`/areas/${areaId}`}>
+            <FolderTree className="mr-2 h-4 w-4" />
+            Detalhes da Área
           </Link>
         </Button>
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight flex items-center gap-2">
-            {areaLoading ? (
-              <Skeleton className="h-8 w-48" />
-            ) : (
-              <>
-                <GitBranch className="h-5 w-5 text-primary" />
-                {area?.name ?? "Área"} — Árvore de Processos
-              </>
-            )}
-          </h2>
-          <p className="text-muted-foreground">
-            Visualize a hierarquia completa de processos desta área. Clique em
-            um nó para ver os detalhes.
-          </p>
-        </div>
       </div>
 
       {/* React Flow */}

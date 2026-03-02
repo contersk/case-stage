@@ -17,6 +17,7 @@ const segmentLabels: Record<string, string> = {
   processes: "Processos",
   new: "Novo",
   edit: "Editar",
+  tree: "Árvore de Processos",
 };
 
 interface BreadcrumbEntry {

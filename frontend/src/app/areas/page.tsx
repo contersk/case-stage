@@ -210,7 +210,7 @@ export default function AreasPage() {
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-1">
                         <Button variant="ghost" size="icon" asChild>
-                          <Link href={`/areas/${area.id}/tree`}>
+                          <Link href={`/areas/${area.id}`}>
                             <Eye className="h-4 w-4" />
                           </Link>
                         </Button>
