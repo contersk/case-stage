@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTheme } from "next-themes";
 import {
   FolderTree,
   GitBranch,
@@ -55,6 +56,8 @@ import {
 
 export default function DashboardPage() {
   const [areaFilter, setAreaFilter] = useState<string | undefined>(undefined);
+  const { resolvedTheme } = useTheme();
+  const axisColor = resolvedTheme === "dark" ? "#e2e8f0" : "#1e293b";
 
   const areas = useAreas(1, 1);
   const allAreas = useAreas(1, 100);
@@ -119,6 +122,8 @@ export default function DashboardPage() {
       accent: "text-violet-600 dark:text-violet-400",
     },
   ];
+
+  // pagina dashboard com filtros e gráficos usando os hooks de dashboard para obter os dados agregados, e componentes de UI para exibir as informações de forma visual e interativa.
 
   return (
     <div className="space-y-8">
@@ -278,18 +283,20 @@ export default function DashboardPage() {
                     type="number"
                     allowDecimals={false}
                     tick={{
-                      fill: "hsl(var(--muted-foreground))",
+                      fill: axisColor,
                       fontSize: 12,
                     }}
+                    stroke={axisColor}
                   />
                   <YAxis
                     type="category"
                     dataKey="name"
                     width={70}
                     tick={{
-                      fill: "hsl(var(--foreground))",
+                      fill: axisColor,
                       fontSize: 12,
                     }}
+                    stroke={axisColor}
                   />
                   <Tooltip
                     contentStyle={{
@@ -354,18 +361,20 @@ export default function DashboardPage() {
                     type="number"
                     allowDecimals={false}
                     tick={{
-                      fill: "hsl(var(--muted-foreground))",
+                      fill: axisColor,
                       fontSize: 12,
                     }}
+                    stroke={axisColor}
                   />
                   <YAxis
                     type="category"
                     dataKey="name"
                     width={80}
                     tick={{
-                      fill: "hsl(var(--foreground))",
+                      fill: axisColor,
                       fontSize: 12,
                     }}
+                    stroke={axisColor}
                   />
                   <Tooltip
                     contentStyle={{
